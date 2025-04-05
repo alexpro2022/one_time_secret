@@ -36,6 +36,9 @@ _ASM = TypeVar("_ASM", bound=async_sessionmaker)
 
 async_session = Annotated[AsyncSession, Depends(get_async_session)]
 StrFieldType = Annotated[str, Field(min_length=1)]
+PositiveInt = Annotated[int, Field(default=1, gt=0)]
+JsonType: TypeAlias = dict[str, str]
+
 
 # Bot types ===============================================
 # from typing import TypeAlias

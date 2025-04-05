@@ -15,7 +15,11 @@ class Secret(BaseModel):
     secret: StrFieldType = Field(examples=["доступ_к_конфиденциальным_данным"])
 
 
-class SecretCreate(Secret):
+class PassPhrase(BaseModel):
+    passphrase: StrFieldType | None = Field(default=None, examples=["my_passphrase"])
+
+
+class SecretCreate(Secret, PassPhrase):
     """
     Тело POST-запроса (JSON) может содержать:
     * secret (string) — обязательный параметр, конфиденциальные данные.
@@ -30,7 +34,6 @@ class SecretCreate(Secret):
     }
     """
 
-    passphrase: StrFieldType | None = Field(default=None, examples=["my_passphrase"])
     ttl_seconds: int | None = Field(
         default=None, ge=app_conf.secret_min_ttl, examples=["3600"]
     )
