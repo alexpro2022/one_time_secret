@@ -1,7 +1,7 @@
-from src.repo.models.base import Base, Mapped, mapped_column
+from src.repo.models.base import Base, Mapped
 
 
 class Secret(Base):
-    secret: Mapped[str]  # = mapped_column(index=True, unique=True)
+    secret: Mapped[str]
     passphrase: Mapped[str | None]
     ttl_seconds: Mapped[int | None]

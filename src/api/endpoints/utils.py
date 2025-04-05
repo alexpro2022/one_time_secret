@@ -2,6 +2,7 @@ from collections.abc import Coroutine
 from typing import Any
 
 from fastapi import HTTPException, status
+
 from src.repo.db.exceptions import NotFound
 
 

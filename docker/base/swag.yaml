@@ -1,0 +1,29 @@
+# PROD ===================================
+name: Frontend
+
+networks:
+  frontend:
+    name: frontend
+
+services:
+  nginx:
+    container_name: swag
+    image: linuxserver/swag:2.4.0
+    restart: unless-stopped
+    depends_on:
+      - backend
+    cap_add:
+      - NET_ADMIN
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+      - URL=${DOMAIN}
+      - VALIDATION=http
+    ports:
+      - 443:443
+      - 80:80
+    volumes:
+      - ./nginx.conf:/config/nginx/site-confs/default.conf
+    networks:
+      - frontend

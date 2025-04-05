@@ -1,0 +1,18 @@
+# APP dependencies
+fastapi
+# fastapi-cli
+# fastapi-users[sqlalchemy]
+
+asyncpg
+# psycopg
+# psycopg-binary
+# email-validator
+pydantic
+pydantic_core
+pydantic-settings
+SQLAlchemy
+# sqlmodel
+uvicorn[standard]
+# starlette-admin
+# psycopg==3.2.1
+# psycopg-binary==3.2.1

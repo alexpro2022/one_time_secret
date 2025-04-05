@@ -1,0 +1,27 @@
+name: Your_Proj_name + _dev
+
+volumes:
+  db_vol:
+
+networks:
+  admin:
+    name: admin
+  backend:
+    name: backend
+
+services:
+
+  adminer:
+    extends:
+      file: ../base/db.yaml
+      service: adminer
+
+  db:
+    extends:
+      file: ../base/db.yaml
+      service: db
+
+  fastapi:
+    extends:
+      file: ../base/backend.yaml
+      service: fastapi_dev
