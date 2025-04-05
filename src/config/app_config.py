@@ -1,14 +1,16 @@
 # from pydantic import EmailStr, SecretStr
 
 from src.config.base import BaseConf
+from src.types_app import PositiveInt
 
 
 class SettingsApp(BaseConf):
     DEFAULT_STR: str = "To be implemented in .env file"
     url_prefix: str = "/api/v1"
-    app_title: str = f"App title {DEFAULT_STR}"
-    app_description: str = f"App description {DEFAULT_STR}"
-    secret_min_ttl: int = 0
+    app_title: str = f"App title: {DEFAULT_STR}"
+    app_description: str = f"App description: {DEFAULT_STR}"
+    secret_min_ttl: PositiveInt
+    # str_min_length: PositiveInt = 2
 
     # SUPER_ONLY: str = "__Только для суперюзеров:__ "
     # AUTH_ONLY: str = "__Только для авторизованных пользователей:__ "

@@ -1,10 +1,9 @@
-from fastapi import APIRouter, status
+from fastapi import APIRouter, HTTPException, Query, status
 
 from src.api.endpoints.utils import try_return
-from src.api.responses import response_404
+from src.api.responses import response_400, response_404
 from src.api.schemas import secret as schemas
 from src.config.app_config import app_conf
-from src.repo.models import Secret as repo_model
 from src.services import secret
 from src.types_app import TypePK, async_session
 
@@ -19,11 +18,8 @@ router = APIRouter(prefix=f"{app_conf.url_prefix}/secret", tags=["Secrets"])
     response_model=schemas.SecretKey,
 )
 async def create_secret(session: async_session, create_secret: schemas.SecretCreate):
-    return await secret.create(
-        session=session,
-        model=repo_model,
-        **create_secret.model_dump(),
-    )
+    obj = await secret.create(session, **create_secret.model_dump())
+    return {"secret_key": str(obj.id)}
 
 
 @router.get(
@@ -34,13 +30,8 @@ async def create_secret(session: async_session, create_secret: schemas.SecretCre
     responses=response_404("secret"),
 )
 async def get_secret(session: async_session, secret_key: TypePK):
-    return await try_return(
-        return_coro=secret.get(
-            session=session,
-            model=repo_model,
-            id=secret_key,
-        )
-    )
+    obj = await try_return(return_coro=secret.get(session, id=secret_key))
+    return {"secret": obj.secret}
 
 
 @router.delete(
@@ -48,13 +39,22 @@ async def get_secret(session: async_session, secret_key: TypePK):
     summary="delete secret",
     description=secret.delete.__doc__,
     response_model=schemas.SecretDelete,
-    responses=response_404("secret"),
+    responses={
+        **response_400("Passphrase is missing or incorrect"),
+        **response_404("secret"),
+    },
 )
-async def delete_secret(session: async_session, secret_key: TypePK):
-    return await try_return(
-        return_coro=secret.delete(
-            session=session,
-            model=repo_model,
-            id=secret_key,
-        )
+async def delete_secret(
+    session: async_session,
+    secret_key: TypePK,
+    passphrase: str | None = Query(default=None, min_length=2),
+):
+    obj = await try_return(
+        return_coro=secret.delete(session, passphrase, id=secret_key)
     )
+    if obj is None:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Passphrase is missing or incorrect",
+        )
+    return {"status": "secret_deleted"}
