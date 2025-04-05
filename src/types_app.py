@@ -1,9 +1,10 @@
 from collections.abc import Callable
 from typing import Annotated, Any, TypeAlias, TypeVar
 
+from fastapi import Depends
+from pydantic import Field
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
-from fastapi import Depends
 from src.config.db_config import get_async_session
 from src.repo.models.base import Base, TypeModel, TypePK  # noqa
 
@@ -34,7 +35,7 @@ _ASM = TypeVar("_ASM", bound=async_sessionmaker)
 # from src.config.db_config import get_async_session
 
 async_session = Annotated[AsyncSession, Depends(get_async_session)]
-
+StrFieldType = Annotated[str, Field(min_length=1)]
 
 # Bot types ===============================================
 # from typing import TypeAlias

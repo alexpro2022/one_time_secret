@@ -1,4 +1,4 @@
-from src.repo.db import crud
+# from src.repo.db import crud
 from src.types_app import _AS, TypeModel, TypePK
 
 
@@ -10,7 +10,7 @@ async def create(session: _AS, model: TypeModel, **create_data) -> TypeModel:
     """
     assert session.in_transaction()
     # return await crud.create(session, model(**create_data))
-    return {"message": "create OK"}
+    return {"secret_key": "уникальный_идентификатор"}
 
 
 async def get(session: _AS, model: TypeModel, **filter_data) -> TypeModel:
@@ -21,7 +21,7 @@ async def get(session: _AS, model: TypeModel, **filter_data) -> TypeModel:
     \n  * Сохранить в логе (PostgreSQL) факт выдачи секрета (время, IP-адрес и т. д.).
     """
     # return await crud.get_one(session, model, **filter_data)
-    return {"message": "get OK"}
+    return {"secret": "доступ_к_конфиденциальным_данным"}
 
 
 async def delete(session: _AS, model: TypeModel, id: TypePK) -> TypeModel:
@@ -33,7 +33,7 @@ async def delete(session: _AS, model: TypeModel, id: TypePK) -> TypeModel:
     """
     assert session.in_transaction()
     # return await crud.delete(session, model, id)
-    return {"message": "delete OK"}
+    return {"status": "secret_deleted"}
 
 
 # If you don't use an alembic -> uncomment below
