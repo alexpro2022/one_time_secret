@@ -1,8 +1,7 @@
 from typing import Any, TypeAlias
 
-from pydantic import BaseModel
-
 from fastapi import status
+from pydantic import BaseModel
 
 ResponseType: TypeAlias = dict[int, dict[BaseModel, Any]]
 
