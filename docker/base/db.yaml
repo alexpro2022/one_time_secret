@@ -1,0 +1,116 @@
+name: DB_services
+# https://hub.docker.com/_/postgres
+# https://docs.docker.com/reference/compose-file/interpolation/
+
+# Constants for DATABASE_URI (see also .env, config/db_config.py)
+const_hostname: &hostname "${DB_HOST:-${DEFAULT}}"
+const_db_user: &db_user "${DB_USER:-${DEFAULT}}"
+const_db_pwd: &db_password "${DB_PASSWORD:-${DEFAULT}}"
+const_db_name: &db_name "${DB_NAME:-${DEFAULT}}"
+# Constants for TEST_DATABASE_URI (see also .env, config/test_config.py)
+const_hostname_test: &hostname_test "${TEST_DB_HOST:-${TEST_DEFAULT}}"
+const_db_user_test: &db_user_test "${TEST_DB_USER:-${TEST_DEFAULT}}"
+const_db_pwd_test: &db_password_test "${TEST_DB_PASSWORD:-${TEST_DEFAULT}}"
+const_db_name_test: &db_name_test "${TEST_DB_NAME:-${TEST_DEFAULT}}"
+
+template_extends_base: &extends_db_base
+  extends:
+    service: db_base
+
+
+volumes:
+  db_vol:
+
+
+networks:
+  admin:
+    name: admin
+  backend:
+    name: backend
+
+
+services:
+
+  adminer:
+    # GUI Server == DB_HOST
+    # GUI Database == DB_NAME
+    container_name: adminer
+    image: adminer
+    restart: always
+    ports:
+      - ${DB_ADMIN_PORT:-8080}:8080
+    networks:
+      - admin
+
+  db_base:
+    image: postgres:${DB_TAG:-latest}
+    restart: always
+    healthcheck:
+      # test: ["CMD-SHELL", "pg_isready", "-U ${DB_USER} -d ${DB_NAME}"]
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: ${INTERVAL:-10s}
+      timeout: ${TIMEOUT:-5s}
+      retries: ${RETRIES:-5}
+      start_period: ${START_PERIOD:-10s}
+
+
+  db_test:
+    container_name: test_database
+    hostname: *hostname_test
+    <<: *extends_db_base
+    volumes:
+      - /var/lib/postgresql/data/
+    environment:
+      POSTGRES_DB: *db_name_test
+      POSTGRES_USER: *db_user_test
+      POSTGRES_PASSWORD: *db_password_test
+
+
+  db:
+    container_name: database
+    hostname: *hostname
+    user: *db_user
+    <<: *extends_db_base
+    volumes:
+      - db_vol:/var/lib/postgresql/data/
+    environment:
+      POSTGRES_DB: *db_name
+      POSTGRES_USER: *db_user
+      POSTGRES_PASSWORD: *db_password
+      # - POSTGRES_PASSWORD_FILE=/run/secrets/db-password
+    networks:
+      - admin
+      - backend
+    # # expose:
+    # #  - 5432
+
+
+# === How to connect to postgres in container ===
+
+# docker ps
+# docker exec -it <container> psql -U <postgres_user> -d <db_name>
+
+# \l -  List of databases
+#    Name    |   Owner   | Encoding |  Collate   |   Ctype    | ICU Locale | Locale Provider |    Access privileges
+# -----------+-----------+----------+------------+------------+------------+-----------------+-------------------------
+#  alex_db   | alex_user | UTF8     | en_US.utf8 | en_US.utf8 |            | libc            |
+#  postgres  | alex_user | UTF8     | en_US.utf8 | en_US.utf8 |            | libc            |
+#  template0 | alex_user | UTF8     | en_US.utf8 | en_US.utf8 |            | libc            | =c/alex_user           +
+#            |           |          |            |            |            |                 | alex_user=CTc/alex_user
+#  template1 | alex_user | UTF8     | en_US.utf8 | en_US.utf8 |            | libc            | =c/alex_user           +
+#            |           |          |            |            |            |                 | alex_user=CTc/alex_user
+
+
+# \du - List of roles (users with their roles)
+#  Role name |                         Attributes                         | Member of
+# -----------+------------------------------------------------------------+-----------
+#  alex_user | Superuser, Create role, Create DB, Replication, Bypass RLS | {}
+
+
+# \dt - List of relations (tables)
+#  Schema |      Name       | Type  |   Owner
+# --------+-----------------+-------+-----------
+#  public | alembic_version | table | alex_user
+
+
+# \q - quit
