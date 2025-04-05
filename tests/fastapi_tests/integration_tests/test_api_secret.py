@@ -1,10 +1,13 @@
-from typing import Any
-
 from fastapi import status
 
-from src.api.endpoints import secret, utils
+from src.api.endpoints import secret
 from tests.testing_tools.base_test_fastapi import BaseTest_API, HTTPMethod
-from tests.testing_tools.mixins import DBMixin
+from tests.testing_tools.mixins import (
+    ClientNoCacheMixin,
+    DBMixin,
+    NotFoundMixin,
+    PathParamsMixin,
+)
 from tests.unit_tests.test_repo_fastapi import secret_test_data as DATA
 
 PATH_PARAMS = dict(secret_key=DATA.item_uuid)
@@ -12,18 +15,9 @@ MSG_NOT_FOUND = "Object with attributes {{'id': {item_id}}} not found"
 DETAIL_NOT_FOUND = {"detail": MSG_NOT_FOUND.format(item_id=repr(DATA.item_uuid))}
 
 
-# MIXINS ===================================================
-class PathParamsMixin:
-    path_params: dict[str, Any] = PATH_PARAMS
-
-
-class NotFoundMixin(PathParamsMixin):
-    expected_status_code: int = status.HTTP_404_NOT_FOUND
-    expected_response_json: dict[str, Any] | None = DETAIL_NOT_FOUND
-
-
-class ClientNoCacheMixin:
-    expected_response_headers: dict[str, str] = utils.CLIENT_NO_CACHE
+# MIXINS ==================================================
+PathParamsMixin.path_params = PATH_PARAMS
+NotFoundMixin.expected_response_json = DETAIL_NOT_FOUND
 
 
 class API_DB(DBMixin, BaseTest_API):
@@ -33,12 +27,12 @@ class API_DB(DBMixin, BaseTest_API):
 
 
 # TESTS ======================================================
-class Test_GetSecretNotFound(NotFoundMixin, BaseTest_API):
+class Test_GetSecretNotFound(PathParamsMixin, NotFoundMixin, BaseTest_API):
     http_method = HTTPMethod.GET
     path_func = secret.get_secret
 
 
-class Test_DeleteSecretNotFound(NotFoundMixin, BaseTest_API):
+class Test_DeleteSecretNotFound(PathParamsMixin, NotFoundMixin, BaseTest_API):
     http_method = HTTPMethod.DELETE
     path_func = secret.delete_secret
 

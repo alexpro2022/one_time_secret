@@ -48,7 +48,7 @@ repos:
     rev: v0.991
     hooks:
     -   id: mypy
-        exclude: alembic # tests
+        exclude: alembic  # |tests
 
 
 - repo: https://github.com/astral-sh/ruff-pre-commit
