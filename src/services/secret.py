@@ -10,7 +10,11 @@ async def create(session: _AS, **create_data) -> TypeModel:
     \n  * Залогировать создание секрета в PostgreSQL (например, ID секрета, время создания, IP-адрес, при необходимости — указание ttl_seconds и т. д.).
     """
     assert session.in_transaction()
-    return await crud.create(session, repo_model(**create_data))
+    scrt = await crud.create(session, repo_model(**create_data))
+    # log
+    # cache ttl expire
+    # task db delete on ttl expire
+    return scrt
 
 
 async def get(session: _AS, **filter_data) -> TypeModel:
@@ -20,7 +24,11 @@ async def get(session: _AS, **filter_data) -> TypeModel:
     \n  * После успешного получения «секрета» повторный запрос по тому же secret_key не должен выдавать конфиденциальные данные.
     \n  * Сохранить в логе (PostgreSQL) факт выдачи секрета (время, IP-адрес и т. д.).
     """
-    return await crud.delete(session, repo_model, **filter_data)
+    assert session.in_transaction()
+    # scrt = await cache.delete
+    scrt = await crud.delete(session, repo_model, **filter_data)
+    # log
+    return scrt
 
 
 async def delete(

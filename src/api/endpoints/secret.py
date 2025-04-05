@@ -1,13 +1,17 @@
-from fastapi import APIRouter, HTTPException, Query, status
+from fastapi import APIRouter, Depends, HTTPException, Query, status
 
-from src.api.endpoints.utils import try_return
+from src.api.endpoints.utils import set_headers_no_client_cache, try_return
 from src.api.responses import response_400, response_404
 from src.api.schemas import secret as schemas
 from src.config.app_config import app_conf
 from src.services import secret
 from src.types_app import TypePK, async_session
 
-router = APIRouter(prefix=f"{app_conf.url_prefix}/secret", tags=["Secrets"])
+router = APIRouter(
+    prefix=f"{app_conf.url_prefix}/secret",
+    tags=["Secrets"],
+    dependencies=[Depends(set_headers_no_client_cache)],
+)
 
 
 @router.post(
