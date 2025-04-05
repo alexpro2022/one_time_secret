@@ -1,0 +1,21 @@
+name: Test Suite
+
+
+on:
+  workflow_dispatch:
+
+  push:
+    branches-ignore:
+      - "develop"
+      - "main"
+
+  pull_request:
+    branches:
+      - "develop"
+
+
+jobs:
+  tests:
+    uses: ./.github/workflows/job_tests.yaml
+    # secrets:
+    #  codecov_token: ${{ secrets.CODECOV_TOKEN }}

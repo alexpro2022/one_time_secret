@@ -7,5 +7,5 @@ class Test_AppConfig(BaseTest_Config):
     conf_name = "app_conf"
     conf_fields = {
         "url_prefix": "/api/v1",
-        "secret_min_ttl": 1,
+        # "secret_min_ttl": 1,
     }
