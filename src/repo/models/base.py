@@ -33,7 +33,6 @@ class Base(DeclarativeBase):
         }
 
     def __repr__(self) -> str:
-        # args = [f"{k}={repr(v)}" for k, v in self.model_dump().items()]
         args = [f"{k}={v!r}" for k, v in self.model_dump().items()]
         return f"{self.__class__.__name__}({', '.join(args)})"
 
@@ -44,4 +43,4 @@ class Base(DeclarativeBase):
 
 
 TypeModel: TypeAlias = type[Base]
-TypePK: TypeAlias = uuid.UUID | int
+TypePK: TypeAlias = uuid.UUID
