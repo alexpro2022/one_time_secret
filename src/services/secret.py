@@ -1,9 +1,9 @@
 from src.repo.db import crud
 from src.repo.models import Secret as repo_model
-from src.types_app import _AS, JsonType
+from src.types_app import _AS, TypeModel
 
 
-async def create(session: _AS, **create_data) -> JsonType:
+async def create(session: _AS, **create_data) -> TypeModel:
     """
     После успешного создания секрета сервис должен:
     \n  * Сохранить секрет.
@@ -13,7 +13,7 @@ async def create(session: _AS, **create_data) -> JsonType:
     return await crud.create(session, repo_model(**create_data))
 
 
-async def get(session: _AS, **filter_data) -> JsonType:
+async def get(session: _AS, **filter_data) -> TypeModel:
     """
     После успешного возврата «секрета»:
     \n  * При первом запросе по secret_key необходимо вернуть ранее сохранённый «секрет».
@@ -23,7 +23,9 @@ async def get(session: _AS, **filter_data) -> JsonType:
     return await crud.delete(session, repo_model, **filter_data)
 
 
-async def delete(session: _AS, passphrase: str | None, **filter_data) -> JsonType:
+async def delete(
+    session: _AS, passphrase: str | None, **filter_data
+) -> TypeModel | None:
     """
     Может потребоваться, если при создании секрета передавался passphrase (или по иной логике, если это предусмотрено бизнес-требованиями).
     После успешного удаления:
@@ -35,8 +37,3 @@ async def delete(session: _AS, passphrase: str | None, **filter_data) -> JsonTyp
     if obj.passphrase != passphrase:
         return None
     return await crud.delete(session, repo_model, **filter_data)
-
-
-# If you don't use an alembic -> uncomment below
-# async def create_db_and_tables() -> None:
-#     await crud.create_db_and_tables()
