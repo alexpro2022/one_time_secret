@@ -37,7 +37,7 @@ jobs:
               # RETRIES=3
               # START_PERIOD=10s
 
-              DOCKERHUB_USERNAME=${{ vars.DOCKERHUB_USERNAME }}
+              DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}
               GITHUB_REPO_NAME=${{ github.event.repository.name }}:latest
 
             _EOF_
