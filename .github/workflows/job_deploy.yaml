@@ -18,5 +18,5 @@ jobs:
           script: |
             cd ${{ github.event.repository.name }}
             sudo docker compose -f docker/prod/docker-compose.yaml --env-file .env down
-            sudo docker rmi ${{ vars.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:latest
+            sudo docker rmi ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:latest
             sudo docker compose -f docker/prod/docker-compose.yaml --env-file .env up -d --quiet-pull
