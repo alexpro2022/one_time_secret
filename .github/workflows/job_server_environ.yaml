@@ -20,13 +20,13 @@ jobs:
             sudo mkdir -p ${{ github.event.repository.name }} -m 777
             sudo cat > ${{ github.event.repository.name }}/.env << _EOF_
 
-              # APP_PORT=9000
-              # APP_TITLE=${{ vars.APP_TITLE }}
-              # APP_DESCRIPTION=${{ vars.APP_DESCRIPTION }}
+              APP_PORT=${{ vars.APP_PORT }}
+              APP_TITLE=${{ vars.APP_TITLE }}
+              APP_DESCRIPTION=${{ vars.APP_DESCRIPTION }}
 
               DB_TAG=15.1-alpine
               DEFAULT=postgres
-              # DB_ADMIN_PORT=9001
+              DB_ADMIN_PORT=${{ vars.DB_ADMIN_PORT }}
               # DB_USER=${{ secrets.DB_USER }}
               # DB_PASSWORD=${{ secrets.DB_PASSWORD }}
               # DB_HOST=${{ vars.DB_HOST }}
