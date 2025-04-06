@@ -34,8 +34,6 @@ class Found(PathParamsMixin, ClientNoCacheMixin, API_DB): ...
 
 
 # TESTS ======================================================
-
-
 class Test_GetSecretNotFound(NotFound):
     http_method = HTTPMethod.GET
     path_func = secret.get_secret
