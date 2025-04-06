@@ -1,7 +1,7 @@
 from pydantic import BaseModel, Field
 
 from src.config.app_config import app_conf
-from src.types_app import StrFieldType
+from src.config.base import StrFieldType
 
 
 class Secret(BaseModel):

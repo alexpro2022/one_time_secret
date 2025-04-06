@@ -1,7 +1,4 @@
-# from pydantic import EmailStr, SecretStr
-
-from src.config.base import BaseConf
-from src.types_app import PositiveInt
+from src.config.base import BaseConf, PositiveInt
 
 
 class SettingsApp(BaseConf):

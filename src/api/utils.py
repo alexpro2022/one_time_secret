@@ -17,7 +17,7 @@ def set_headers_no_client_cache(response: Response) -> Response:
     return response
 
 
-def get_client_info(request: Request):
+def get_client_info(request: Request) -> dict[str, Any]:
     return dict(
         host=request.client.host,
         port=request.client.port,

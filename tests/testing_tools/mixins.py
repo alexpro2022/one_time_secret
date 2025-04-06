@@ -2,7 +2,7 @@ from typing import Any
 
 from httpx import Response
 
-from src.api.endpoints import utils
+from src.api import utils
 from src.repo.models import Base
 from src.types_app import _AS, _F
 from tests.testing_tools.utils import assert_equal, assert_isinstance

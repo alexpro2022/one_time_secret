@@ -1,7 +1,8 @@
 from collections.abc import AsyncGenerator, Callable
-from typing import Any
+from typing import Annotated, Any
 
 from pydantic import (  # noqa  , SecretStr, EmailStr, computed_field
+    Field,
     PostgresDsn,
     model_validator,
 )
@@ -14,6 +15,9 @@ from sqlalchemy.ext.asyncio import (  # noqa
     create_async_engine,
 )
 from sqlalchemy.pool import NullPool, Pool  # noqa
+
+StrFieldType = Annotated[str, Field(min_length=1)]
+PositiveInt = Annotated[int, Field(default=1, gt=0)]
 
 
 class BaseConf(BaseSettings):
