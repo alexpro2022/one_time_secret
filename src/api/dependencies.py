@@ -10,4 +10,6 @@ async_session = Annotated[AsyncSession, Depends(get_async_session)]
 client_info = Annotated[dict[str, Any], Depends(get_client_info)]
 set_headers = Depends(set_headers_no_client_cache)
 
-from src.services.secret import secret_service  # noqa
+from src.services.secret import SecretService  # noqa
+
+secret_service = Annotated[SecretService, Depends()]

@@ -1,5 +1,5 @@
 from src.config.app_config import app_conf
-from src.repo.models import Secret
+from src.models import Secret
 from tests.testing_tools import BaseTest_CRUD, BaseTest_Model, Data
 
 secret_test_data = Data(

@@ -1,7 +1,6 @@
 from datetime import datetime as dt
-from typing import Annotated
 
-from fastapi import BackgroundTasks, Depends
+from fastapi import BackgroundTasks
 
 from src.api.dependencies import async_session, client_info
 from src.models.events import Event
@@ -77,6 +76,3 @@ class SecretService:
         )
         yield await self.delete(checkpass=False, **filter_data)
         # decode in schema
-
-
-secret_service = Annotated[SecretService, Depends()]
