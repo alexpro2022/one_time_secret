@@ -1,15 +1,7 @@
 from datetime import datetime as dt
-from enum import Enum
 
-from src.config.base import NonEmptyStr
-from src.repo.models.base import Base, Mapped, mapped_column
-from src.types_app import TypePK
-
-
-class Event(Enum):
-    created: NonEmptyStr = "created"
-    read: NonEmptyStr = "read"
-    deleted: NonEmptyStr = "deleted"
+from src.models.events import Event
+from src.repo.models.base import Base, Mapped, TypePK, mapped_column
 
 
 class Log(Base):

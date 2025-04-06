@@ -4,9 +4,9 @@ from typing import Annotated
 from fastapi import BackgroundTasks, Depends
 
 from src.api.dependencies import async_session, client_info
-from src.models.log import Event
+from src.models.events import Event
+from src.models.secret import Secret
 from src.repo.db import crud
-from src.repo.models import Secret
 from src.services.log import logger
 from src.types_app import TypeModel
 
