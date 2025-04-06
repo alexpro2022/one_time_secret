@@ -55,5 +55,5 @@ repos:
   rev: v0.11.4
   hooks:
     - id: ruff
-      args: [ --fix, --ignore=F821]
+      args: [ --fix ]
     - id: ruff-format
