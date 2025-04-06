@@ -5,6 +5,7 @@ from fastapi import Depends
 from pydantic import Field
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
+from src.api.endpoints.utils import get_client_info
 from src.config.db_config import get_async_session
 from src.repo.models.base import Base, TypeModel, TypePK  # noqa
 
@@ -29,20 +30,13 @@ _ASM = TypeVar("_ASM", bound=async_sessionmaker)
 #     cls: type[Model],
 
 # FastAPI types ===============================================
-# from typing import Annotated
-# from sqlalchemy.ext.asyncio import AsyncSession
-# from fastapi import Depends
-# from src.config.db_config import get_async_session
-
+JsonType: TypeAlias = dict[str, str]
+DictType: TypeAlias = dict[str, Any]
 async_session = Annotated[AsyncSession, Depends(get_async_session)]
+ClientInfo = Annotated[DictType, Depends(get_client_info)]
+# BGTasks = Annotated[BackgroundTasks, Depends()]
 StrFieldType = Annotated[str, Field(min_length=1)]
 PositiveInt = Annotated[int, Field(default=1, gt=0)]
-JsonType: TypeAlias = dict[str, str]
-
-
-# Bot types ===============================================
-# from typing import TypeAlias
-# from aiogram.types import CallbackQuery, Message
 
 
 # TESTS ====================

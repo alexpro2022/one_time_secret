@@ -1,7 +1,7 @@
 from collections.abc import Coroutine
 from typing import Any
 
-from fastapi import HTTPException, Response, status
+from fastapi import HTTPException, Request, Response, status
 
 from src.repo.db.exceptions import NotFound
 
@@ -15,6 +15,13 @@ CLIENT_NO_CACHE = {
 def set_headers_no_client_cache(response: Response) -> Response:
     response.headers.update(CLIENT_NO_CACHE)
     return response
+
+
+def get_client_info(request: Request):
+    return dict(
+        host=request.client.host,
+        port=request.client.port,
+    )
 
 
 async def try_return(
