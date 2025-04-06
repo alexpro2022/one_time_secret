@@ -1,7 +1,7 @@
 from pydantic import BaseModel, Field
 
 from src.config.app_config import app_conf
-from src.config.base import StrFieldType
+from src.config.base import NonEmptyStr
 
 
 class Secret(BaseModel):
@@ -12,7 +12,7 @@ class Secret(BaseModel):
     }
     """
 
-    secret: StrFieldType = Field(
+    secret: NonEmptyStr = Field(
         description="обязательный параметр, конфиденциальные данные.",
         examples=["доступ_к_конфиденциальным_данным"],
     )
@@ -33,7 +33,7 @@ class SecretCreate(Secret):
     }
     """
 
-    passphrase: StrFieldType | None = Field(
+    passphrase: NonEmptyStr | None = Field(
         default=None,
         description="Опциональный параметр, фраза-пароль для дополнительной защиты (например, может потребоваться при удалении).",
         examples=["my_passphrase"],
