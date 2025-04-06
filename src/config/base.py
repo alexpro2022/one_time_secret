@@ -16,7 +16,7 @@ from sqlalchemy.ext.asyncio import (  # noqa
 )
 from sqlalchemy.pool import NullPool, Pool  # noqa
 
-StrFieldType = Annotated[str, Field(min_length=1)]
+NonEmptyStr = Annotated[str, Field(min_length=1)]
 PositiveInt = Annotated[int, Field(default=1, gt=0)]
 
 
