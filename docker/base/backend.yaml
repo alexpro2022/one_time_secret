@@ -3,8 +3,6 @@ name: Backend_services
 const_context: &context ../../
 const_dockerfile: &Dockerfile docker/dev/Dockerfile
 const_image: &image ${DOCKERHUB_USERNAME}/${GITHUB_REPO_NAME}
-# const_command: &command
-#   bash -c "alembic upgrade head && python src/bot/main.py"
 
 template_extends_base: &extends_backend_base
   extends:
@@ -49,7 +47,7 @@ services:
       context: *context
       dockerfile: *Dockerfile
       target: test
-    command: bash -c "pytest"  #  --cov --cov-config=.coveragerc"
+    command: bash -c "pytest"
 
 
   backend_generic:
@@ -78,23 +76,3 @@ services:
   fastapi_prod:
     <<: *extends_fastapi_generic
     image: *image
-    # "${DOCKERHUB_USERNAME}/${GITHUB_REPO_NAME}"
-    # networks:
-    #   - frontend
-    #   - backend
-    # expose:
-    #  - ${APP_DEV_PORT:-8000}
-
-
- # backend_migration:
-  #   container_name: migration
-  #   <<: *extends_backend_base
-  #   build:
-  #     context: *context
-  #     dockerfile: *Dockerfile
-  #     target: migration
-  #   command: bash -c "alembic revision --autogenerate"
-  #   volumes:  # bind mount for online coding
-  #     - ../../alembic:/app/alembic
-  #   networks:
-  #     - admin

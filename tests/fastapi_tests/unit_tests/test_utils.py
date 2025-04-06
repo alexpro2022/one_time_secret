@@ -1,7 +1,7 @@
 import pytest
 from fastapi.exceptions import HTTPException
 
-from src.api.endpoints import utils
+from src.api import utils
 from src.repo.db import exceptions
 
 

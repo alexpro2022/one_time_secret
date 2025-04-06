@@ -87,12 +87,12 @@ class BaseTest_API:
     json: dict[str, Any] | None = None
     expected_status_code: int = 200
     expected_response_json: dict[str, Any] | None = None  # TypeResponseJson
+    expected_response_headers: dict[str, str] = {}
 
     async def test__endpoint(
         self, async_client: AsyncClient, get_test_session: _AS
     ) -> None:
         await setup_db(self, get_test_session)
-        # for readability reason response is separately
         response = await request(
             async_client,
             http_method=self.http_method,
@@ -103,4 +103,6 @@ class BaseTest_API:
             expected_status_code=self.expected_status_code,
             expected_response_json=self.expected_response_json,
         )
+        for k, v in self.expected_response_headers.items():
+            assert_equal(response.headers.get(k), v)
         await check_db(self, get_test_session, response)

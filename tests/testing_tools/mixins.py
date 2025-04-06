@@ -1,8 +1,24 @@
+from typing import Any
+
 from httpx import Response
 
+from src.api import utils
 from src.repo.models import Base
 from src.types_app import _AS, _F
 from tests.testing_tools.utils import assert_equal, assert_isinstance
+
+
+class ClientNoCacheMixin:
+    expected_response_headers: dict[str, str] = utils.CLIENT_NO_CACHE
+
+
+class PathParamsMixin:
+    path_params: dict[str, Any]
+
+
+class NotFoundMixin:
+    expected_status_code: int = 404
+    expected_response_json: dict[str, Any] | None
 
 
 class DBMixin:
@@ -44,22 +60,3 @@ async def setup_db(obj, session: _AS):
 async def check_db(obj, session: _AS, response: Response):
     if hasattr(obj, "check_db"):
         await obj.check_db(session, response)
-
-
-# async def check_db(
-#     *,
-#     session: _AS,
-#     model: TypeModel,
-#     response: Response,
-#     delete: bool = False,
-# ) -> None:
-#     assert_isinstance(response, Response)
-#     obj = await session.get(model, response.json().get("id"))
-#     if delete:
-#         assert obj is None
-#     else:
-#         assert obj is not None
-#         await session.refresh(obj)
-#         db_json = obj.model_dump()
-#         db_json["id"] = str(db_json["id"])
-#         assert_equal(db_json, response.json())

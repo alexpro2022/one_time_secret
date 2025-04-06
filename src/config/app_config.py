@@ -1,7 +1,4 @@
-# from pydantic import EmailStr, SecretStr
-
-from src.config.base import BaseConf
-from src.types_app import PositiveInt
+from src.config.base import BaseConf, PositiveInt
 
 
 class SettingsApp(BaseConf):
@@ -9,7 +6,7 @@ class SettingsApp(BaseConf):
     url_prefix: str = "/api/v1"
     app_title: str = f"App title: {DEFAULT_STR}"
     app_description: str = f"App description: {DEFAULT_STR}"
-    secret_min_ttl: PositiveInt
+    secret_min_ttl: PositiveInt = 5 * 60
     # str_min_length: PositiveInt = 2
 
     # SUPER_ONLY: str = "__Только для суперюзеров:__ "
