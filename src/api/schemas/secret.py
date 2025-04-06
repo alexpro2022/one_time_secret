@@ -12,14 +12,13 @@ class Secret(BaseModel):
     }
     """
 
-    secret: StrFieldType = Field(examples=["доступ_к_конфиденциальным_данным"])
+    secret: StrFieldType = Field(
+        description="обязательный параметр, конфиденциальные данные.",
+        examples=["доступ_к_конфиденциальным_данным"],
+    )
 
 
-class PassPhrase(BaseModel):
-    passphrase: StrFieldType | None = Field(default=None, examples=["my_passphrase"])
-
-
-class SecretCreate(Secret, PassPhrase):
+class SecretCreate(Secret):
     """
     Тело POST-запроса (JSON) может содержать:
     * secret (string) — обязательный параметр, конфиденциальные данные.
@@ -34,8 +33,16 @@ class SecretCreate(Secret, PassPhrase):
     }
     """
 
+    passphrase: StrFieldType | None = Field(
+        default=None,
+        description="Опциональный параметр, фраза-пароль для дополнительной защиты (например, может потребоваться при удалении).",
+        examples=["my_passphrase"],
+    )
     ttl_seconds: int | None = Field(
-        default=None, ge=app_conf.secret_min_ttl, examples=["3600"]
+        default=app_conf.secret_min_ttl,
+        description="Опциональный параметр, время жизни секрета в секундах.",
+        ge=app_conf.secret_min_ttl,
+        examples=["300"],
     )
 
 
@@ -47,7 +54,10 @@ class SecretKey(BaseModel):
     }
     """
 
-    secret_key: str = Field(examples=["уникальный_идентификатор"])
+    secret_key: str = Field(
+        description="Уникальный_идентификатор секретных данных, например первичный ключ формата UUID.",
+        examples=["уникальный_идентификатор"],
+    )
 
 
 class SecretDelete(BaseModel):

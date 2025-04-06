@@ -1,10 +1,12 @@
+from src.config.app_config import app_conf
 from src.repo.models import Secret
 from tests.testing_tools import BaseTest_CRUD, BaseTest_Model, Data
 
 secret_test_data = Data(
     model=Secret,
     create_data={"secret": "доступ_к_конфиденциальным_данным"},
-    nullable_fields=["passphrase", "ttl_seconds"],
+    default_data={"ttl_seconds": app_conf.secret_min_ttl},
+    nullable_fields=["passphrase"],
 )
 
 
