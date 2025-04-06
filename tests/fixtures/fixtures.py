@@ -5,7 +5,7 @@ import pytest_asyncio
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.config.testdb_config import async_session, engine
-from src.repo.models import Base
+from src.models import Base
 
 
 @pytest.fixture
