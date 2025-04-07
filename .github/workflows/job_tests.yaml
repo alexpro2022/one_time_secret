@@ -24,10 +24,10 @@ jobs:
           POSTGRES_USER: github_actions
           POSTGRES_PASSWORD: github_actions
           POSTGRES_DB: github_actions
-        ports:
-          - 5432:5432
+        # ports:
+        #   - 5432:5432
       redis:
-        image: redis:latest
+        image: redis:6-alpine
         # options: >-
         #   --health-cmd "redis-cli ping"
         #   --health-interval 10s
