@@ -11,7 +11,8 @@ from src.models import Base
 @pytest.fixture
 def override_session(monkeypatch: pytest.MonkeyPatch):
     """General fixture."""
-    monkeypatch.setattr("src.services.log.async_session", async_session)
+    for module in ("src.config.db_config", "src.services.log"):
+        monkeypatch.setattr(f"{module}.async_session", async_session)
 
 
 @pytest_asyncio.fixture

@@ -25,3 +25,12 @@ services:
     extends:
       file: ../base/backend.yaml
       service: fastapi_dev
+
+  redis:
+    image: redis:latest
+    ports:
+      - 6379:6379
+    env_file:
+      - ../../.env
+    networks:
+      - backend

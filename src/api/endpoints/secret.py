@@ -30,11 +30,11 @@ async def create_secret(secret: secret_service, create_secret: schemas.SecretCre
     "/{secret_key}",
     summary="get secret",
     description=secret_service.get.__doc__,
-    response_model=schemas.Secret,
+    response_model=schemas.SecretOut,
     responses=response_404("secret"),
 )
 async def get_secret(secret: secret_service, secret_key: TypePK):
-    obj = await try_return(return_coro=anext(secret.get(id=secret_key)))
+    obj = await try_return(return_coro=secret.get(id=secret_key))
     return {"secret": obj.secret}
 
 
