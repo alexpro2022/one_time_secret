@@ -31,10 +31,10 @@ class BaseDBConf(BaseConf):
     DB_PORT: int = 5432
     # SCHEME: str = "postgresql+psycopg"
     SCHEME: str = "postgresql+asyncpg"
-    DB_USER: str | None = None
-    DB_PASSWORD: str | None = None
-    DB_HOST: str | None = None
-    DB_NAME: str | None = None
+    DB_USER: str = DEFAULT  # | None = None
+    DB_PASSWORD: str = DEFAULT  # | None = None
+    DB_HOST: str = DEFAULT  # | None = None
+    DB_NAME: str = DEFAULT  # | None = None
 
     @property
     def DATABASE_URI(self) -> PostgresDsn:
@@ -47,18 +47,18 @@ class BaseDBConf(BaseConf):
             path=self.DB_NAME,
         )
 
-    def set_defaults(self, fields: str, default: Any) -> None:
-        for f in fields.split():
-            if getattr(self, f) is None:
-                setattr(self, f, default)
+    # def set_defaults(self, fields: str, default: Any) -> None:
+    #     for f in fields.split():
+    #         if getattr(self, f) is None:
+    #             setattr(self, f, default)
 
-    @model_validator(mode="after")
-    def check_attrs(self) -> "BaseDBConf":
-        self.set_defaults(
-            fields="DB_USER DB_PASSWORD DB_HOST DB_NAME",
-            default=self.DEFAULT,
-        )
-        return self
+    # @model_validator(mode="after")
+    # def check_attrs(self) -> "BaseDBConf":
+    #     self.set_defaults(
+    #         fields="DB_USER DB_PASSWORD DB_HOST DB_NAME",
+    #         default=self.DEFAULT,
+    #     )
+    #     return self
 
     def get_async_engine_session(
         self,
