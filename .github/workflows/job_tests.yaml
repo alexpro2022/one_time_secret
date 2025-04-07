@@ -17,6 +17,10 @@ jobs:
       matrix:
         python-version: ["3.10", "3.11", "3.12"]
     services:
+      redis:
+        image: redis:latest
+        ports:
+          - 6379:6379
       postgres:
         image: postgres:latest
         env:
