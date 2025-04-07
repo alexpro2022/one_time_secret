@@ -1,16 +1,15 @@
 name: Your_Proj_name + _prod
 
-volumes:
-  db_vol:
-
-networks:
-  admin:
-    name: admin
-  backend:
-    name: backend
-
 services:
 
+  fastapi:
+    extends:
+      file: ../base/backend.yaml
+      service: fastapi_prod
+
+  # paste swag service here
+
+# Below is common for DEV and PROD
   adminer:
     extends:
       file: ../base/db.yaml
@@ -21,9 +20,18 @@ services:
       file: ../base/db.yaml
       service: db
 
-  fastapi:
-    extends:
-      file: ../base/backend.yaml
-      service: fastapi_prod
+  redis:
+    image: redis:latest
+    container_name: cache
+    networks:
+      - backend
 
-  # paste swag service here
+
+networks:
+  admin:
+    name: admin
+  backend:
+    name: backend
+
+volumes:
+  db_vol:

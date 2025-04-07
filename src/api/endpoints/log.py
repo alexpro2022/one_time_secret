@@ -8,6 +8,10 @@ from src.repo.db import crud
 router = APIRouter(prefix=f"{app_conf.url_prefix}/log", tags=["Logs"])
 
 
-@router.get("")
+@router.get(
+    "",
+    summary="All log records.",
+    description="The endpoint is just for convenient log checking on development.",
+)
 async def get_logs(session: async_session):
     return await crud.get_all(session, Log)
