@@ -8,7 +8,6 @@ services:
       file: ../base/db.yaml
       service: db_test
 
-
   test:
     extends:
       file: ../base/backend.yaml
@@ -16,7 +15,3 @@ services:
 
   redis:
     image: redis:latest
-    ports:
-      - 6379:6379
-    env_file:
-      - ../../.env
