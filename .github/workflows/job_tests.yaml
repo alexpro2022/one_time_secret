@@ -46,7 +46,7 @@ jobs:
 
       - name: Run Tests
         env:
-          TEST_DB_HOST: ${{ secrets.GH_HOST }}
+          DB_HOST: ${{ secrets.GH_HOST }}
           REDIS_HOST: ${{ secrets.GH_HOST }}
         run: |
           pytest
