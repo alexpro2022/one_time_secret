@@ -7,7 +7,7 @@ from src.api.schemas.log import Log as log_schema
 from tests.fastapi_tests.integration_tests.test_api_secret import MSG_NOT_FOUND
 from tests.testing_tools.base_test_fastapi import HTTPMethod, request
 from tests.testing_tools.utils import assert_equal
-from tests.unit_tests.test_repo_fastapi import secret_test_data as DATA
+from tests.unit_tests.test_repos import secret_test_data as DATA
 
 
 async def test_scenario(init_db, async_client: AsyncClient):

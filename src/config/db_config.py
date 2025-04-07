@@ -11,9 +11,3 @@ engine, async_session, get_async_session = db_conf.get_async_engine_session(
     # expire_on_commit=False,
     # autoflush=False,
 )
-
-
-# assert (
-#     str(db_conf.DATABASE_URI)
-#     == "postgresql+asyncpg://postgres:postgres@postgres:5432/postgres"
-# )
