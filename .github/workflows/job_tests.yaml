@@ -45,11 +45,12 @@ jobs:
           pip install -r requirements/test.requirements.txt
 
       - name: Run Tests
-        run: |
-          pytest
         env:
           TEST_DB_HOST: ${{ secrets.GH_HOST }}
           REDIS_HOST: ${{ secrets.GH_HOST }}
+        run: |
+          pytest
+
 
 #          --cov --cov-report=xml
 #      - name: Upload coverage reports to Codecov with GitHub Action
