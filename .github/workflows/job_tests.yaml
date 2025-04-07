@@ -59,7 +59,7 @@ jobs:
         run: |
           pytest
         env:
-          REDIS_URI: "redis://redis:6379"
+          REDIS_URI: "redis://0.0.0.0:6379"
 
 #          --cov --cov-report=xml
 #      - name: Upload coverage reports to Codecov with GitHub Action
