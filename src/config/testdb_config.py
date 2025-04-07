@@ -8,6 +8,8 @@ from src.config.base import (  # , model_validator
 class SettingsTestDB(BaseDBConf):
     model_config = SettingsConfigDict(env_prefix="TEST_")
 
+    DEFAULT = "github_actions"
+
     # DEFAULT_FOR_GH_ACTIONS: str = "github_actions"
     # DEFAULT: str = DEFAULT_FOR_GH_ACTIONS
 
