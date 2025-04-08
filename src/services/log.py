@@ -1,4 +1,4 @@
-from src.config.db_config import async_session
+from src.config.repositories.db_config import async_session
 from src.models.log import Log
 from src.repo.db import crud
 

@@ -4,14 +4,14 @@ import pytest
 import pytest_asyncio
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.config.testdb_config import async_session, engine
+from src.config.repositories.testdb_config import async_session, engine
 from src.models import Base
 
 
 @pytest.fixture
 def override_session(monkeypatch: pytest.MonkeyPatch):
     """General fixture."""
-    for module in ("src.config.db_config", "src.services.log"):
+    for module in ("src.config.repositories.db_config", "src.services.log"):
         monkeypatch.setattr(f"{module}.async_session", async_session)
 
 

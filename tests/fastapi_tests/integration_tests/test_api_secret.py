@@ -9,7 +9,7 @@ from tests.testing_tools.mixins import (
     NotFoundMixin,
     PathParamsMixin,
 )
-from tests.unit_tests.test_repo_fastapi import secret_test_data as DATA
+from tests.unit_tests.test_repos import secret_test_data as DATA
 
 PATH_PARAMS = dict(secret_key=DATA.item_uuid)
 MSG_NOT_FOUND = "Object with attributes {{'id': {item_id}}} not found"
