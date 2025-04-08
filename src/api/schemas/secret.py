@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field, model_validator
+from pydantic import BaseModel, Field, PositiveInt, model_validator
 
 from src import cipher
 from src.config.app_config import app_conf
@@ -13,7 +13,7 @@ class SecretKey(BaseModel):
     }
     """
 
-    secret_key: str = Field(
+    secret_key: NonEmptyStr = Field(
         description="Уникальный_идентификатор секретных данных, например первичный ключ формата UUID.",
         examples=["уникальный_идентификатор"],
     )
@@ -27,7 +27,7 @@ class SecretDelete(BaseModel):
     }
     """
 
-    status: str = Field(examples=["secret_deleted"])
+    status: NonEmptyStr = Field(examples=["secret_deleted"])
 
 
 class _Secret(BaseModel):
@@ -78,9 +78,9 @@ class SecretCreate(SecretIn):
         description="Опциональный параметр, фраза-пароль для дополнительной защиты (например, может потребоваться при удалении).",
         examples=["my_passphrase"],
     )
-    ttl_seconds: int | None = Field(
+    ttl_seconds: PositiveInt | None = Field(
         default=app_conf.secret_min_ttl,
         description="Опциональный параметр, время жизни секрета в секундах.",
         ge=app_conf.secret_min_ttl,
-        examples=["300"],
+        examples=["30"],
     )

@@ -6,4 +6,5 @@ class SettingsRedis(BaseRedisConf):
 
 
 redis_conf = SettingsRedis()
+
 get_aioredis, _ = redis_conf.get_dependencies()

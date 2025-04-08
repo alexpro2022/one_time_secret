@@ -5,7 +5,7 @@ from src.repo.models.base import Base, Mapped, TypePK, mapped_column
 
 
 class Log(Base):
-    """(например, ID секрета, время создания, IP-адрес, при необходимости — указание ttl_seconds и т. д.)."""
+    """Лог событий (например, ID секрета, время создания, IP-адрес, при необходимости — указание ttl_seconds и т. д.)."""
 
     client_info: Mapped[str]
     secret_id: Mapped[TypePK]

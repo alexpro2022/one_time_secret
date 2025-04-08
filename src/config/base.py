@@ -1,7 +1,7 @@
 from collections.abc import AsyncGenerator, Callable
 from typing import Any
 
-from pydantic import PositiveInt, PostgresDsn, RedisDsn
+from pydantic import PositiveInt, PostgresDsn, RedisDsn, SecretStr
 from pydantic_core import MultiHostUrl  # noqa
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from redis import Redis  # type: ignore [import]
@@ -29,7 +29,7 @@ class BaseDBConf(BaseConf):
     DEFAULT: str = "github_actions"
     SCHEME: str = "postgresql+asyncpg"
     USER: str = DEFAULT
-    PASSWORD: str = DEFAULT
+    PASSWORD: SecretStr = DEFAULT
     HOST: str = DEFAULT
     PORT: int = 5432
     NAME: str = DEFAULT
@@ -39,7 +39,7 @@ class BaseDBConf(BaseConf):
         return MultiHostUrl.build(
             scheme=self.SCHEME,
             username=self.USER,
-            password=self.PASSWORD,  # .get_secret_value(),
+            password=self.PASSWORD.get_secret_value(),
             host=self.HOST,
             port=self.PORT,
             path=self.NAME,
