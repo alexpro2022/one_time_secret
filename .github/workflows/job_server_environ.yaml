@@ -27,6 +27,11 @@ jobs:
               DB_TAG=15.1-alpine
               DB_DEFAULT=postgres
               DB_ADMIN_PORT=${{ vars.DB_ADMIN_PORT }}
+              DB_USER=${DB_DEFAULT}
+              DB_PASSWORD=${DB_DEFAULT}
+              DB_HOST=${DB_DEFAULT}
+              DB_PORT=5432  # postgres standard port
+              DB_NAME=${DB_DEFAULT}
               # DB_USER=${{ secrets.DB_USER }}
               # DB_PASSWORD=${{ secrets.DB_PASSWORD }}
               # DB_HOST=${{ vars.DB_HOST }}
