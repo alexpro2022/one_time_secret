@@ -20,9 +20,9 @@ jobs:
       postgres:
         image: postgres:latest
         env:
-          POSTGRES_USER: ${{ secrets.GHA }}
-          POSTGRES_PASSWORD: ${{ secrets.GHA }}
-          POSTGRES_DB: ${{ secrets.GHA }}
+          POSTGRES_USER: github_actions
+          POSTGRES_PASSWORD: github_actions
+          POSTGRES_DB: github_actions
         ports:
           - 5432:5432
       redis:
@@ -59,3 +59,4 @@ jobs:
 #          token: ${{ secrets.CODECOV_TOKEN }}
 #          verbose: true
 # ${{ secrets.GHH }}
+# ${{ secrets.GHA }}
