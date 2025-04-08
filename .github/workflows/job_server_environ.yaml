@@ -25,7 +25,7 @@ jobs:
               APP_DESCRIPTION=${{ vars.APP_DESCRIPTION }}
 
               DB_TAG=15.1-alpine
-              DEFAULT=postgres
+              DB_DEFAULT=postgres
               DB_ADMIN_PORT=${{ vars.DB_ADMIN_PORT }}
               # DB_USER=${{ secrets.DB_USER }}
               # DB_PASSWORD=${{ secrets.DB_PASSWORD }}
