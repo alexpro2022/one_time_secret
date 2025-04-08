@@ -48,7 +48,6 @@ jobs:
         env:
           TEST_DB_HOST: 0.0.0.0
           REDIS_HOST: 0.0.0.0
-          # ${{ secrets.GHH }}
         run: |
           pytest
 
@@ -59,3 +58,4 @@ jobs:
 #        with:
 #          token: ${{ secrets.CODECOV_TOKEN }}
 #          verbose: true
+# ${{ secrets.GHH }}

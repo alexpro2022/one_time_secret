@@ -44,7 +44,7 @@ services:
       - admin
 
   db_base:
-    user: postgres
+    # user: postgres
     image: postgres:${DB_TAG:-latest}
     restart: always
     healthcheck:
@@ -73,6 +73,7 @@ services:
     container_name: database
     hostname: *hostname
     # user: *db_user
+    user: postgres
     <<: *extends_db_base
     volumes:
       - db_vol:/var/lib/postgresql/data/
