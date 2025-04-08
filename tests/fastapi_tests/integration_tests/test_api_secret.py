@@ -42,7 +42,7 @@ class Test_GetSecretNotFound(NotFound):
 class Test_GetSecret(Found):
     http_method = HTTPMethod.GET
     path_func = secret.get_secret
-    expected_response_json = {"secret": DATA.expected_response_json_create["secret"]}
+    expected_response_json = {"secret": "доступ_к_конфиденциальным_данным"}
 
 
 class Test_DeleteSecretNotFound(NotFound):

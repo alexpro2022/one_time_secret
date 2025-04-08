@@ -1,8 +1,13 @@
-def encode(field: str) -> str:
-    # assert 0, "ENCODING======================="
-    return field
+from cryptography.fernet import Fernet
+
+from src.config.app_config import app_conf
+
+cipher_suite = Fernet(key=app_conf.secret_key.get_secret_value().encode())
 
 
-def decode(field: str) -> str:
-    # assert 0, "DECODING======================="
-    return field
+def encrypt(data: str) -> str:
+    return cipher_suite.encrypt(data.encode()).decode()
+
+
+def decrypt(data: str) -> str:
+    return cipher_suite.decrypt(data).decode()
