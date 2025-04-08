@@ -2,7 +2,7 @@ from pydantic import BaseModel, Field, model_validator
 
 from src import cipher
 from src.config.app_config import app_conf
-from src.config.base import NonEmptyStr
+from src.types_app import NonEmptyStr
 
 
 class SecretKey(BaseModel):

@@ -20,8 +20,8 @@ jobs:
       postgres:
         image: postgres:latest
         env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: github_actions
+          POSTGRES_PASSWORD: github_actions
           POSTGRES_DB: github_actions
         ports:
           - 5432:5432
@@ -46,7 +46,6 @@ jobs:
 
       - name: Run Tests
         env:
-          # DB_HOST: 0.0.0.0
           TEST_DB_HOST: 0.0.0.0
           REDIS_HOST: 0.0.0.0
         run: |

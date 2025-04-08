@@ -38,7 +38,7 @@ class SecretService:
             return await db_crud.delete(session, self.model, **filter_data)
 
         if session is None:
-            from src.config.db_config import async_session
+            from src.config.repositories.db_config import async_session
 
             async with async_session.begin() as session:
                 return await _()

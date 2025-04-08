@@ -1,13 +1,11 @@
 from collections.abc import AsyncGenerator, Callable
-from typing import Annotated, Any
+from typing import Any
 
-from pydantic import (  # noqa  , SecretStr, EmailStr, computed_field
-    Field,
-    PostgresDsn,
-    model_validator,
-)
+from pydantic import PositiveInt, PostgresDsn, RedisDsn
 from pydantic_core import MultiHostUrl  # noqa
 from pydantic_settings import BaseSettings, SettingsConfigDict
+from redis import Redis  # type: ignore [import]
+from redis import asyncio as aioredis  # type: ignore [import]
 from sqlalchemy.ext.asyncio import (  # noqa
     AsyncEngine,
     AsyncSession,
@@ -16,51 +14,38 @@ from sqlalchemy.ext.asyncio import (  # noqa
 )
 from sqlalchemy.pool import NullPool, Pool  # noqa
 
-NonEmptyStr = Annotated[str, Field(min_length=1)]
-PositiveInt = Annotated[int, Field(default=1, gt=0)]
+from src.types_app import NonEmptyStr
 
 
+# ====================================================
 class BaseConf(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=".env", env_file_encoding="utf8", extra="ignore"
     )
 
 
+# ====================================================
 class BaseDBConf(BaseConf):
-    DEFAULT: str = "postgres"
-    DB_PORT: int = 5432
-    # SCHEME: str = "postgresql+psycopg"
+    DEFAULT: str = "github_actions"
     SCHEME: str = "postgresql+asyncpg"
-    DB_USER: str = DEFAULT  # | None = None
-    DB_PASSWORD: str = DEFAULT  # | None = None
-    DB_HOST: str = DEFAULT  # | None = None
-    DB_NAME: str = DEFAULT  # | None = None
+    USER: str = DEFAULT
+    PASSWORD: str = DEFAULT
+    HOST: str = DEFAULT
+    PORT: int = 5432
+    NAME: str = DEFAULT
 
     @property
     def DATABASE_URI(self) -> PostgresDsn:
         return MultiHostUrl.build(
             scheme=self.SCHEME,
-            username=self.DB_USER,
-            password=self.DB_PASSWORD,  # .get_secret_value(),
-            host=self.DB_HOST,
-            port=self.DB_PORT,
-            path=self.DB_NAME,
+            username=self.USER,
+            password=self.PASSWORD,  # .get_secret_value(),
+            host=self.HOST,
+            port=self.PORT,
+            path=self.NAME,
         )
 
-    # def set_defaults(self, fields: str, default: Any) -> None:
-    #     for f in fields.split():
-    #         if getattr(self, f) is None:
-    #             setattr(self, f, default)
-
-    # @model_validator(mode="after")
-    # def check_attrs(self) -> "BaseDBConf":
-    #     self.set_defaults(
-    #         fields="DB_USER DB_PASSWORD DB_HOST DB_NAME",
-    #         default=self.DEFAULT,
-    #     )
-    #     return self
-
-    def get_async_engine_session(
+    def get_dependencies(
         self,
         echo: bool = False,
         expire_on_commit: bool = False,
@@ -90,3 +75,29 @@ class BaseDBConf(BaseConf):
                 assert s.in_transaction()
 
         return engine, async_session, get_async_session
+
+
+# ====================================================
+class BaseRedisConf(BaseConf):
+    model_config = SettingsConfigDict(env_prefix="REDIS_")
+    SCHEME: NonEmptyStr = "redis"
+    HOST: NonEmptyStr = "redis"
+    PORT: PositiveInt = 6379
+    EXPIRE: PositiveInt = 3600
+
+    @property
+    def REDIS_URI(self) -> RedisDsn:
+        return MultiHostUrl.build(
+            scheme=self.SCHEME,
+            host=self.HOST,
+            port=self.PORT,
+        )
+
+    def get_dependencies(self):
+        def get_aioredis() -> aioredis.Redis:
+            return aioredis.from_url(str(self.REDIS_URI), decode_responses=True)
+
+        def get_redis():
+            return Redis(host=self.HOST, port=self.PORT, db=0)
+
+        return get_aioredis, get_redis

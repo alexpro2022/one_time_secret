@@ -3,15 +3,16 @@ name: DB_services
 # https://docs.docker.com/reference/compose-file/interpolation/
 
 # Constants for DATABASE_URI (see also .env, config/db_config.py)
-const_hostname: &hostname "${DB_HOST:-${DEFAULT}}"
-const_db_user: &db_user "${DB_USER:-${DEFAULT}}"
-const_db_pwd: &db_password "${DB_PASSWORD:-${DEFAULT}}"
-const_db_name: &db_name "${DB_NAME:-${DEFAULT}}"
+const_hostname: &hostname "${DB_HOST:-${DB_DEFAULT}}"
+const_db_user: &db_user "${DB_USER:-${DB_DEFAULT}}"
+const_db_pwd: &db_password "${DB_PASSWORD:-${DB_DEFAULT}}"
+const_db_name: &db_name "${DB_NAME:-${DB_DEFAULT}}"
+
 # Constants for TEST_DATABASE_URI (see also .env, config/test_config.py)
-const_hostname_test: &hostname_test "${TEST_DB_HOST:-${TEST_DEFAULT}}"
-const_db_user_test: &db_user_test "${TEST_DB_USER:-${TEST_DEFAULT}}"
-const_db_pwd_test: &db_password_test "${TEST_DB_PASSWORD:-${TEST_DEFAULT}}"
-const_db_name_test: &db_name_test "${TEST_DB_NAME:-${TEST_DEFAULT}}"
+const_hostname_test: &hostname_test "${TEST_DB_HOST:-${TEST_DB_DEFAULT}}"
+const_db_user_test: &db_user_test "${TEST_DB_USER:-${TEST_DB_DEFAULT}}"
+const_db_pwd_test: &db_password_test "${TEST_DB_PASSWORD:-${TEST_DB_DEFAULT}}"
+const_db_name_test: &db_name_test "${TEST_DB_NAME:-${TEST_DB_DEFAULT}}"
 
 template_extends_base: &extends_db_base
   extends:
@@ -43,6 +44,7 @@ services:
       - admin
 
   db_base:
+    user: postgres
     image: postgres:${DB_TAG:-latest}
     restart: always
     healthcheck:
@@ -57,6 +59,7 @@ services:
   db_test:
     container_name: test_database
     hostname: *hostname_test
+    # user: *db_user_test
     <<: *extends_db_base
     volumes:
       - /var/lib/postgresql/data/
@@ -69,7 +72,7 @@ services:
   db:
     container_name: database
     hostname: *hostname
-    user: *db_user
+    # user: *db_user
     <<: *extends_db_base
     volumes:
       - db_vol:/var/lib/postgresql/data/

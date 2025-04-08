@@ -6,8 +6,10 @@ from typing import Any
 import pytest_asyncio
 from httpx import ASGITransport, AsyncClient
 
-from src.config.db_config import get_async_session
-from src.config.testdb_config import get_async_session as override_get_async_session
+from src.config.repositories.db_config import get_async_session
+from src.config.repositories.testdb_config import (
+    get_async_session as override_get_async_session,
+)
 from src.main import app
 
 BASE_URL = "http://test"

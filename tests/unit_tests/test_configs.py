@@ -1,4 +1,5 @@
-from src.config import app_config, cache_config, db_config, testdb_config
+from src.config import app_config
+from src.config.repositories import cache_config, db_config, testdb_config
 from tests.testing_tools import BaseTest_Config, BaseTest_DBConfig
 
 
