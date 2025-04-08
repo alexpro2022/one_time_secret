@@ -24,19 +24,22 @@ jobs:
               APP_TITLE=${{ vars.APP_TITLE }}
               APP_DESCRIPTION=${{ vars.APP_DESCRIPTION }}
 
-              DB_TAG=15.1-alpine
-              DB_DEFAULT=postgres
               DB_ADMIN_PORT=${{ vars.DB_ADMIN_PORT }}
-              DB_USER=${DB_DEFAULT}
-              DB_PASSWORD=${DB_DEFAULT}
-              DB_HOST=${DB_DEFAULT}
-              DB_PORT=5432  # postgres standard port
-              DB_NAME=${DB_DEFAULT}
-              # DB_USER=${{ secrets.DB_USER }}
-              # DB_PASSWORD=${{ secrets.DB_PASSWORD }}
-              # DB_HOST=${{ vars.DB_HOST }}
-              # DB_PORT=${{ vars.DB_PORT }}
-              # DB_NAME=${{ vars.DB_NAME }}
+              DB_TAG=15.1-alpine
+              DB_DEFAULT=postgres_prod
+              DB_USER=postgres_prod
+              DB_PASSWORD=postgres_prod
+              DB_HOST=postgres_prod
+              DB_PORT=5432
+              DB_NAME=postgres_prod
+
+              # Below are examples for secrets and vars
+                # DB_USER=${{ secrets.DB_USER }}
+                # DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+                # DB_HOST=${{ vars.DB_HOST }}
+                # DB_PORT=${{ vars.DB_PORT }}
+                # DB_NAME=${{ vars.DB_NAME }}
+
               # INTERVAL=10s
               # TIMEOUT=10s
               # RETRIES=3
