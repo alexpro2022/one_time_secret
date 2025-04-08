@@ -26,12 +26,12 @@ jobs:
 
               DB_ADMIN_PORT=${{ vars.DB_ADMIN_PORT }}
               DB_TAG=15.1-alpine
-              DB_DEFAULT=postgres_prod
-              DB_USER=postgres_prod
-              DB_PASSWORD=postgres_prod
-              DB_HOST=postgres_prod
+              DB_DEFAULT=postgres
+              DB_USER=postgres
+              DB_PASSWORD=postgres
+              DB_HOST=postgres
               DB_PORT=5432
-              DB_NAME=postgres_prod
+              DB_NAME=postgres
 
               # Below are examples for secrets and vars
                 # DB_USER=${{ secrets.DB_USER }}
