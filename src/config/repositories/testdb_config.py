@@ -6,6 +6,7 @@ class SettingsTestDB(BaseDBConf):
 
 
 db_conf = SettingsTestDB()
+
 engine, async_session, get_async_session = db_conf.get_dependencies(
     poolclass=NullPool,
     # expire_on_commit=False,

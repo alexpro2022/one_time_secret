@@ -86,7 +86,7 @@ class BaseTest_API:
     query_params: dict[str, Any] | None = None
     json: dict[str, Any] | None = None
     expected_status_code: int = 200
-    expected_response_json: dict[str, Any] | None = None  # TypeResponseJson
+    expected_response_json: dict[str, Any] | None = None
     expected_response_headers: dict[str, str] = {}
 
     async def test__endpoint(

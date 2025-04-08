@@ -29,7 +29,6 @@ async def _get(
     return await _exec(
         session=session,
         stmt=sa.select(model).filter_by(**filter_data),
-        # stmt=sa.select(model).where(**filter_data),
         commit=False,
     )
 
@@ -48,7 +47,6 @@ async def _try_create(f: Callable, obj: TypeModel) -> TypeModel:
     try:
         return await f()
     except IntegrityError as e:
-        # await session.rollback()
         if "asyncpg.exceptions.NotNullViolationError" in str(e):
             raise NotNullViolationError(e.args[0].split("\n")[0].split(": ")[-1])
         raise AlreadyExists(Message.Error.ALREADY_EXISTS.format(obj=obj))

@@ -1,6 +1,4 @@
-from pydantic import PositiveInt, SecretStr
-
-from src.config.base import BaseConf
+from src.config.base import BaseConf, PositiveInt, SecretStr
 
 
 class SettingsApp(BaseConf):

@@ -44,7 +44,6 @@ class BaseTest_CRUD:
 
     @pytest_asyncio.fixture
     async def create_obj(self, get_test_session: _AS, expected_obj) -> TypeModel:
-        # obj = self.data.model(**self.data.add_id(**self.data.create_data))
         obj = self.data.get_test_obj()
         get_test_session.add(obj)
         await get_test_session.commit()

@@ -2,7 +2,7 @@ from uuid import UUID
 
 from httpx import AsyncClient
 
-from src.api.endpoints import log, secret
+from src.api.endpoints import development, secret
 from src.api.schemas.log import Log as log_schema
 from tests.fastapi_tests.integration_tests.test_api_secret import MSG_NOT_FOUND
 from tests.testing_tools.base_test_fastapi import HTTPMethod, request
@@ -71,7 +71,7 @@ async def test_scenario(init_db, async_client: AsyncClient):
         await request(
             async_client,
             http_method=HTTPMethod.GET,
-            path_func=log.get_logs,
+            path_func=development.get_logs,
         )
     ).json()
     assert logs

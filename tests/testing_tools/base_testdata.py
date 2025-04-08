@@ -79,6 +79,3 @@ class Data:
         self.update_data_json = jsonify(**self.update_data)
         self.expected_response_json_create = jsonify(**_expected_create)
         self.expected_response_json_update = jsonify(**_expected_update)
-
-    # def get_test_obj(self):
-    #     return self.model(**self.add_id(**self.create_data))

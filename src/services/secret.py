@@ -8,7 +8,8 @@ from src.models.secret import Secret
 from src.repo.cache import crud as cache_crud
 from src.repo.db import crud as db_crud
 from src.services.log import logger
-from src.types_app import TypeModel, TypePK
+from src.types_app import _AS, TypeModel
+from src.utils import delay_task
 
 
 class SecretService:
@@ -26,15 +27,22 @@ class SecretService:
         self.redis = redis
         self.bg_tasks = bg_tasks
 
-    async def _del(self, session=None, **filter_data):
-        async def _():
+    async def _del(
+        self,
+        session: _AS | None = None,
+        bg_tasks: BackgroundTasks | None = None,
+        **filter_data,
+    ) -> TypeModel:
+        async def tasks():
             secret_id = filter_data["id"]
-            self.bg_tasks.add_task(
-                cache_crud.delete, client=self.redis, name=str(secret_id)
-            )
-            self.bg_tasks.add_task(
-                logger, self.client_info, secret_id, Event.deleted, dt.now()
-            )
+            await cache_crud.delete(client=self.redis, name=str(secret_id))
+            await logger(self.client_info, secret_id, Event.deleted, dt.now())
+
+        async def _():
+            if bg_tasks:
+                bg_tasks.add_task(tasks)
+            else:
+                await tasks()
             return await db_crud.delete(session, self.model, **filter_data)
 
         if session is None:
@@ -59,7 +67,7 @@ class SecretService:
         if data:
             self.bg_tasks.add_task(self._del, **filter_data)
             return self.model(**data)
-        return await self._del(self.session, **filter_data)
+        return await self._del(self.session, self.bg_tasks, **filter_data)
 
     async def delete(
         self, passphrase: str | None = None, **filter_data
@@ -74,7 +82,7 @@ class SecretService:
         scrt = await db_crud.get_one(self.session, self.model, **filter_data)
         if scrt.passphrase != passphrase:
             return None
-        return await self._del(self.session, **filter_data)
+        return await self._del(self.session, self.bg_tasks, **filter_data)
 
     async def create(self, **create_data) -> TypeModel:
         """
@@ -94,14 +102,8 @@ class SecretService:
             value=scrt.model_dump("id"),  # type: ignore [arg-type]
             ex=scrt.ttl_seconds,
         )
-        # task db delete on ttl expire
-        # self.bg_tasks.add_task(
-        #     self.set_expire, scrt.id, scrt.ttl_seconds
-        # )
+        delay_task(
+            coro=self._del(id=scrt.id),
+            seconds=scrt.ttl_seconds,
+        )
         return scrt
-
-    async def set_expire(self, id: TypePK, delay: int) -> None:
-        import asyncio
-
-        await asyncio.sleep(delay)
-        await self._del(id=id)

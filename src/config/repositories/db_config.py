@@ -6,6 +6,7 @@ class SettingsDB(BaseDBConf):
 
 
 db_conf = SettingsDB()
+
 engine, async_session, get_async_session = db_conf.get_dependencies(
     echo=True,
     # expire_on_commit=False,

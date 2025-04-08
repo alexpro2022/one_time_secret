@@ -1,14 +1,12 @@
 name: DB_services
-# https://hub.docker.com/_/postgres
-# https://docs.docker.com/reference/compose-file/interpolation/
 
-# Constants for DATABASE_URI (see also .env, config/db_config.py)
+# Constants for DATABASE_URI
 const_hostname: &hostname "${DB_HOST:-${DB_DEFAULT}}"
 const_db_user: &db_user "${DB_USER:-${DB_DEFAULT}}"
 const_db_pwd: &db_password "${DB_PASSWORD:-${DB_DEFAULT}}"
 const_db_name: &db_name "${DB_NAME:-${DB_DEFAULT}}"
 
-# Constants for TEST_DATABASE_URI (see also .env, config/test_config.py)
+# Constants for TEST_DATABASE_URI
 const_hostname_test: &hostname_test "${TEST_DB_HOST:-${TEST_DB_DEFAULT}}"
 const_db_user_test: &db_user_test "${TEST_DB_USER:-${TEST_DB_DEFAULT}}"
 const_db_pwd_test: &db_password_test "${TEST_DB_PASSWORD:-${TEST_DB_DEFAULT}}"
@@ -33,8 +31,6 @@ networks:
 services:
 
   adminer:
-    # GUI Server == DB_HOST
-    # GUI Database == DB_NAME
     container_name: adminer
     image: adminer
     restart: always
@@ -44,11 +40,9 @@ services:
       - admin
 
   db_base:
-    # user: postgres
     image: postgres:${DB_TAG:-latest}
     restart: always
     healthcheck:
-      # test: ["CMD-SHELL", "pg_isready", "-U ${DB_USER} -d ${DB_NAME}"]
       test: ["CMD-SHELL", "pg_isready"]
       interval: ${INTERVAL:-10s}
       timeout: ${TIMEOUT:-5s}
@@ -59,7 +53,6 @@ services:
   db_test:
     container_name: test_database
     hostname: *hostname_test
-    # user: *db_user_test
     <<: *extends_db_base
     volumes:
       - /var/lib/postgresql/data/
@@ -72,7 +65,6 @@ services:
   db:
     container_name: database
     hostname: *hostname
-    # user: *db_user
     user: postgres
     <<: *extends_db_base
     volumes:
@@ -81,40 +73,6 @@ services:
       POSTGRES_DB: *db_name
       POSTGRES_USER: *db_user
       POSTGRES_PASSWORD: *db_password
-      # - POSTGRES_PASSWORD_FILE=/run/secrets/db-password
     networks:
       - admin
       - backend
-    # # expose:
-    # #  - 5432
-
-
-# === How to connect to postgres in container ===
-
-# docker ps
-# docker exec -it <container> psql -U <postgres_user> -d <db_name>
-
-# \l -  List of databases
-#    Name    |   Owner   | Encoding |  Collate   |   Ctype    | ICU Locale | Locale Provider |    Access privileges
-# -----------+-----------+----------+------------+------------+------------+-----------------+-------------------------
-#  alex_db   | alex_user | UTF8     | en_US.utf8 | en_US.utf8 |            | libc            |
-#  postgres  | alex_user | UTF8     | en_US.utf8 | en_US.utf8 |            | libc            |
-#  template0 | alex_user | UTF8     | en_US.utf8 | en_US.utf8 |            | libc            | =c/alex_user           +
-#            |           |          |            |            |            |                 | alex_user=CTc/alex_user
-#  template1 | alex_user | UTF8     | en_US.utf8 | en_US.utf8 |            | libc            | =c/alex_user           +
-#            |           |          |            |            |            |                 | alex_user=CTc/alex_user
-
-
-# \du - List of roles (users with their roles)
-#  Role name |                         Attributes                         | Member of
-# -----------+------------------------------------------------------------+-----------
-#  alex_user | Superuser, Create role, Create DB, Replication, Bypass RLS | {}
-
-
-# \dt - List of relations (tables)
-#  Schema |      Name       | Type  |   Owner
-# --------+-----------------+-------+-----------
-#  public | alembic_version | table | alex_user
-
-
-# \q - quit

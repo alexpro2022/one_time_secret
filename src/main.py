@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from src.api.endpoints import log, secret
+from src.api.endpoints import development, secret
 from src.config.app_config import app_conf
 
 # from src.fastapi.api.endpoints import all routers here
@@ -20,7 +20,7 @@ app = FastAPI(
 )
 
 for router in (
-    log.router,
+    development.router,
     secret.router,
     # add routers here
 ):
