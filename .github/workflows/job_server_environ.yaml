@@ -23,6 +23,7 @@ jobs:
               APP_PORT=${{ vars.APP_PORT }}
               APP_TITLE=${{ vars.APP_TITLE }}
               APP_DESCRIPTION=${{ vars.APP_DESCRIPTION }}
+              SECRET_KEY=${{ secrets.SECRET_KEY }}
 
               DB_ADMIN_PORT=${{ vars.DB_ADMIN_PORT }}
               DB_TAG=15.1-alpine

@@ -17,13 +17,13 @@ class Base(BaseModel):
     )
     id: TypePK | None = None
 
-    @staticmethod
-    def parse(exception: ValidationError):
-        return " -> ".join(map(str.strip, str(exception).split("\n")[:-1]))
-
     @classmethod
     def is_valid(cls, **data) -> tuple[bool, Any]:
         try:
             return True, cls.model_validate(data)
         except ValidationError as e:
             return False, cls.parse(e)
+
+    @staticmethod
+    def parse(exception: ValidationError):
+        return " -> ".join(map(str.strip, str(exception).split("\n")[:-1]))

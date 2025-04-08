@@ -47,14 +47,14 @@ class _Secret(BaseModel):
 class SecretOut(_Secret):
     @model_validator(mode="after")
     def decode_secret(self) -> "SecretOut":
-        self.secret = cipher.decode(self.secret)
+        self.secret = cipher.decrypt(self.secret)
         return self
 
 
 class SecretIn(_Secret):
     @model_validator(mode="after")
     def encode_secret(self) -> "SecretIn":
-        self.secret = cipher.encode(self.secret)
+        self.secret = cipher.encrypt(self.secret)
         return self
 
 
