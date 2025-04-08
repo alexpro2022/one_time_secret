@@ -1,0 +1,22 @@
+name: Deploy
+
+
+on:
+  workflow_call:
+
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: appleboy/ssh-action@v1.2.1
+        with:
+          host: ${{ vars.HOST }}
+          username: ${{ secrets.HOST_USERNAME }}
+          password: ${{ secrets.HOST_PASSWORD }}
+          script: |
+            cd ${{ github.event.repository.name }}
+            sudo docker compose -f docker/prod/docker-compose.yaml --env-file .env down
+            sudo docker rmi ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:latest
+            sudo docker compose -f docker/prod/docker-compose.yaml --env-file .env up -d --quiet-pull

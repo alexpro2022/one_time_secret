@@ -1,0 +1,36 @@
+name: Your_Proj_name + _dev
+
+services:
+
+  fastapi:
+    extends:
+      file: ../base/backend.yaml
+      service: fastapi_dev
+
+# Below is common for DEV and PROD
+  adminer:
+    extends:
+      file: ../base/db.yaml
+      service: adminer
+
+  db:
+    extends:
+      file: ../base/db.yaml
+      service: db
+
+
+  redis:
+    image: redis:latest
+    container_name: cache
+    networks:
+      - backend
+
+
+networks:
+  admin:
+    name: admin
+  backend:
+    name: backend
+
+volumes:
+  db_vol:

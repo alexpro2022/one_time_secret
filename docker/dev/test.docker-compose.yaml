@@ -1,0 +1,17 @@
+name: Your_Proj_name + _test
+
+
+services:
+
+  db:
+    extends:
+      file: ../base/db.yaml
+      service: db_test
+
+  test:
+    extends:
+      file: ../base/backend.yaml
+      service: backend_test
+
+  redis:
+    image: redis:latest

@@ -1,0 +1,78 @@
+name: Backend_services
+
+const_context: &context ../../
+const_dockerfile: &Dockerfile docker/dev/Dockerfile
+const_image: &image ${DOCKERHUB_USERNAME}/${GITHUB_REPO_NAME}
+
+template_extends_base: &extends_backend_base
+  extends:
+    service: backend_base
+
+template_extends_generic: &extends_backend_generic
+  extends:
+    service: backend_generic
+
+template_extends_fastapi_generic: &extends_fastapi_generic
+  extends:
+    service: fastapi_generic
+
+template_build: &build_app
+  context: *context
+  dockerfile: *Dockerfile
+  target: app
+
+template_develop: &develop
+  watch:
+    - path: ../../src
+      action: rebuild
+    - path: ../../config
+      action: rebuild
+    - path: ../../requirements
+      action: rebuild
+
+services:
+
+  backend_base:
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - ../../.env
+
+
+  backend_test:
+    <<: *extends_backend_base
+    container_name: test_backend
+    build:
+      context: *context
+      dockerfile: *Dockerfile
+      target: test
+    command: bash -c "pytest"
+
+
+  backend_generic:
+    <<: *extends_backend_base
+    restart: always
+    networks:
+      - backend
+
+
+  fastapi_generic:
+    <<: *extends_backend_generic
+    container_name: fastapi
+    command:
+      bash -c "alembic upgrade head && uvicorn src.main:app --host=0.0.0.0 --port=8000"
+    ports:
+      - "${APP_PORT:-8000}:8000"
+
+  fastapi_dev:
+    <<: *extends_fastapi_generic
+    build: *build_app
+    develop: *develop
+    # volumes:  # bind mount for online coding
+    #  - ../../src:/app/src
+    # https://docs.docker.com/compose/how-tos/file-watch/
+
+  fastapi_prod:
+    <<: *extends_fastapi_generic
+    image: *image

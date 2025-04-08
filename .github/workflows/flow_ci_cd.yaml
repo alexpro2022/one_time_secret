@@ -1,0 +1,27 @@
+name: CI/CD
+
+
+on:
+  workflow_dispatch:
+
+  push:
+    branches:
+      - "develop"
+
+
+jobs:
+
+  build_and_push_to_docker_hub:
+    uses: ./.github/workflows/job_build_push.yaml
+    secrets: inherit
+
+  server_environment:
+    uses: ./.github/workflows/job_server_environ.yaml
+    secrets: inherit
+
+  deploy:
+    needs:
+      - build_and_push_to_docker_hub
+      - server_environment
+    uses: ./.github/workflows/job_deploy.yaml
+    secrets: inherit
