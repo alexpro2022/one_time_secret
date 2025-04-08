@@ -9,7 +9,7 @@ class SettingsApp(BaseConf):
     app_title: str = f"App title: {DEFAULT_STR}"
     app_description: str = f"App description: {DEFAULT_STR}"
     secret_min_ttl: PositiveInt = 5 * 60
-    secret_key: SecretStr
+    secret_key: SecretStr = "wxvQEAtuRjtCHpeL9VPvy7SLVAQHZhlp-Pswcp7RCyw="
 
 
 app_conf = SettingsApp()
