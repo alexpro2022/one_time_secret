@@ -158,4 +158,4 @@ cd .. && rm -fr one_time_secret
 ## Автор:
 [Aleksei Proskuriakov](https://github.com/alexpro2022)
 
-[⬆️В начало](#one_time_secret)
+[⬆️В начало](#one-time-secret)
