@@ -1,7 +1,8 @@
-from datetime import datetime as dt
+from datetime import datetime
 
 from src.models.events import Event
 from src.repo.models.base import Base, Mapped, TypePK, mapped_column
+from src.utils import get_time_now
 
 
 class Log(Base):
@@ -10,4 +11,4 @@ class Log(Base):
     client_info: Mapped[str]
     secret_id: Mapped[TypePK]
     event: Mapped[Event]
-    event_time: Mapped[dt] = mapped_column(default=dt.now)
+    event_time: Mapped[datetime] = mapped_column(default=get_time_now)
