@@ -1,14 +1,14 @@
-from fastapi import status
-
-from src.api.endpoints import secret
-from src.config.app_config import app_conf
-from tests.testing_tools.base_test_fastapi import BaseTest_API, HTTPMethod
-from tests.testing_tools.mixins import (
+from toolkit.test_tools.base_test_fastapi import BaseTest_API, HTTPMethod
+from toolkit.test_tools.mixins import (
     ClientNoCacheMixin,
     DBMixin,
     NotFoundMixin,
     PathParamsMixin,
 )
+
+from fastapi import status
+from src.config import app_conf
+from src.fastapi.api.endpoints import secret
 from tests.unit_tests.test_repos import secret_test_data as DATA
 
 PATH_PARAMS = dict(secret_key=DATA.item_uuid)

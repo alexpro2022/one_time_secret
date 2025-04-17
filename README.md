@@ -47,6 +47,7 @@
 [![Pytest-asyncio](https://img.shields.io/badge/-Pytest--asyncio-464646?logo=Pytest-asyncio)](https://pypi.org/project/pytest-asyncio/)
 [![pytest-cov](https://img.shields.io/badge/-pytest--cov-464646?logo=codecov)](https://pytest-cov.readthedocs.io/en/latest/)
 [![pre-commit](https://img.shields.io/badge/-pre--commit-464646?logo=pre-commit)](https://pre-commit.com/)
+[![toolkit](https://img.shields.io/badge/-toolkit-464646?logo=python)](https://pypi.org/project/app-toolkit-package/)
 
 [⬆️Оглавление](#оглавление)
 

@@ -4,22 +4,13 @@ from collections.abc import AsyncGenerator
 from typing import Any
 
 import pytest_asyncio
-from httpx import ASGITransport, AsyncClient
+from httpx import AsyncClient
 
-from src.config.repositories.db_config import get_async_session
-from src.config.repositories.testdb_config import (
-    get_async_session as override_get_async_session,
-)
-from src.main import app
-
-BASE_URL = "http://test"
+from src.config import db_config, testdb_config
+from src.fastapi.main import app
 
 
 @pytest_asyncio.fixture(scope="session")
-async def async_client() -> AsyncGenerator[AsyncClient, Any]:
-    app.dependency_overrides[get_async_session] = override_get_async_session
-    async with AsyncClient(
-        transport=ASGITransport(app=app),
-        base_url=BASE_URL,
-    ) as ac:
+async def async_client(generic_async_client) -> AsyncGenerator[AsyncClient, Any]:
+    async for ac in generic_async_client(app, db_config, testdb_config):
         yield ac

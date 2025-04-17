@@ -1,3 +1,61 @@
-[tool.ruff]
+[project]
+name = "infra-template"
+version = "1.0.0"
+dependencies = [
+"fastapi",
+"app-toolkit-package",
+"pydantic[email]",
+"pydantic_core",
+"pydantic-settings",
+"alembic",
+"asyncpg",
+"redis",
+"SQLAlchemy",
+"uvicorn[standard]",
+"cryptography",
+]
 
+
+[project.optional-dependencies]
+test = [
+# This is just for local migrations via sqlite
+# TO BE REMOVED !!!
+# "aiosqlite",
+# "pre-commit",
+
+"httpx",
+"pytest",
+"pytest-asyncio",
+"pytest-cov",
+]
+
+
+# [project.scripts]
+# bot = "src.bot.__main__.py"
+
+
+[tool.ruff]
 target-version = "py310"
+
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+asyncio_mode = "auto"
+norecursedirs = "env/*"
+pythonpath = [
+    ".",
+]
+addopts = "-vx -p no:cacheprovider --cov-report term-missing --cov=src"  # -s -W ignore --disable-pytest-warnings
+testpaths = [
+    "tests/unit_tests",
+    "tests/fastapi_tests",
+    "tests/bot_tests",
+]
+python_files = [
+    "test_*.py",
+    "*_tests.py",
+]
+log_cli = "1"
+# filterwarnings =
+#    error
+#    ignore::DeprecationWarning

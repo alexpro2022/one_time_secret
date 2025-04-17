@@ -1,12 +1,12 @@
 from uuid import UUID
 
 from httpx import AsyncClient
+from toolkit.test_tools.base_test_fastapi import HTTPMethod, request
+from toolkit.test_tools.utils import assert_equal
 
-from src.api.endpoints import development, secret
-from src.api.schemas.log import Log as log_schema
+from src.fastapi.api.endpoints import development, secret
+from src.schemas.log import Log as log_schema
 from tests.fastapi_tests.integration_tests.test_api_secret import MSG_NOT_FOUND
-from tests.testing_tools.base_test_fastapi import HTTPMethod, request
-from tests.testing_tools.utils import assert_equal
 from tests.unit_tests.test_repos import secret_test_data as DATA
 
 

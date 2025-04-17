@@ -1,8 +1,9 @@
 from datetime import datetime
 
-from src.models.events import Event
-from src.repo.models.base import Base, Mapped, TypePK, mapped_column
-from src.utils import get_time_now
+from toolkit.models.base import Base, Mapped, TypePK, mapped_column
+from toolkit.utils.utils import get_time_now
+
+from src.models.utils import Event
 
 
 class Log(Base):

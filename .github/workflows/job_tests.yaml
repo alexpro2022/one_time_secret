@@ -13,9 +13,9 @@ jobs:
     name: Tests Ruff and pytest
     runs-on: ubuntu-latest
     strategy:
-      max-parallel: 3
+      max-parallel: 5
       matrix:
-        python-version: ["3.10", "3.11", "3.12"]
+        python-version: ["3.10", "3.11", "3.12", "3.13"]
     services:
       postgres:
         image: postgres:latest
@@ -34,22 +34,21 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
+          cache: "pip"
 
       - name: Ruff check
         uses: chartboost/ruff-action@v1
 
       - name: Install Dependencies
         run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements/requirements.txt
-          pip install -r requirements/test.requirements.txt
+          python -m pip install --upgrade pip && pip install ".[test]"
 
       - name: Run Tests
         env:
           TEST_DB_HOST: 0.0.0.0
           REDIS_HOST: 0.0.0.0
         run: |
-          pytest
+          pytest -sv -W ignore
 
 
 #          --cov --cov-report=xml

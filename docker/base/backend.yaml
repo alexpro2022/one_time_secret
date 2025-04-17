@@ -61,7 +61,7 @@ services:
     <<: *extends_backend_generic
     container_name: fastapi
     command:
-      bash -c "alembic upgrade head && uvicorn src.main:app --host=0.0.0.0 --port=8000"
+      bash -c "alembic upgrade head && uvicorn src.fastapi.main:app --host=0.0.0.0 --port=8000"
     ports:
       - "${APP_PORT:-8000}:8000"
 
@@ -69,9 +69,7 @@ services:
     <<: *extends_fastapi_generic
     build: *build_app
     develop: *develop
-    # volumes:  # bind mount for online coding
-    #  - ../../src:/app/src
-    # https://docs.docker.com/compose/how-tos/file-watch/
+
 
   fastapi_prod:
     <<: *extends_fastapi_generic
