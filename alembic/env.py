@@ -6,13 +6,13 @@ from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
 
 from alembic import context  # type: ignore
-from src.config.repositories.db_config import db_conf
-from src.models import Base
+from src.config import db_config as c  # noqa
+from src.models import Base  # noqa
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
-config.set_main_option("sqlalchemy.url", str(db_conf.DATABASE_URI))
+config.set_main_option("sqlalchemy.url", str(c.db_conf.DATABASE_URI))
 
 # TO BE REMOVED !!!
 # to make migrations:
@@ -21,7 +21,8 @@ config.set_main_option("sqlalchemy.url", str(db_conf.DATABASE_URI))
 # config.set_main_option("sqlalchemy.url", "sqlite+aiosqlite:///./temp.db")
 # 3. Run cli-command:
 # alembic revision --autogenerate -m "migration №1"
-# If `FAILED: Target database is not up to date.` then run `alembic upgrade head` first
+# If `FAILED: Target database is not up to date.` then run:
+# alembic upgrade head
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
@@ -66,7 +67,9 @@ def run_migrations_offline() -> None:
 
 def do_run_migrations(connection: Connection) -> None:
     context.configure(
-        connection=connection, target_metadata=target_metadata, render_as_batch=True
+        connection=connection,
+        target_metadata=target_metadata,
+        render_as_batch=True,
     )
 
     with context.begin_transaction():

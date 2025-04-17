@@ -1,5 +1,6 @@
-from src.config.app_config import app_conf
-from src.repo.models.base import Base, Mapped, mapped_column
+from toolkit.models.base import Base, Mapped, mapped_column
+
+from src.config import app_conf
 
 
 class Secret(Base):

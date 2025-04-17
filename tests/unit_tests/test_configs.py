@@ -1,24 +1,32 @@
-from src.config import app_config
-from src.config.repositories import cache_config, db_config, testdb_config
-from tests.testing_tools import BaseTest_Config, BaseTest_DBConfig
+from toolkit.test_tools import (
+    BaseTest_BotConfig,
+    BaseTest_Config,
+    BaseTest_DBConfig,
+    BaseTest_RedisConfig,
+)
+
+from src import config
 
 
 class Test_AppConfig(BaseTest_Config):
-    module = app_config
+    module = config
     conf_name = "app_conf"
     conf_fields = {
         "url_prefix": "/api/v1",
     }
 
 
-class Test_RedisConfig(BaseTest_Config):
-    module = cache_config
-    conf_name = "redis_conf"
+class Test_BotConfig(BaseTest_BotConfig):
+    module = config.bot_config
 
 
 class Test_DBConfig(BaseTest_DBConfig):
-    module = db_config
+    module = config.db_config
 
 
 class Test_TestDBConfig(BaseTest_DBConfig):
-    module = testdb_config
+    module = config.testdb_config
+
+
+class Test_RedisConfig(BaseTest_RedisConfig):
+    module = config.cache_config

@@ -1,6 +1,6 @@
 from cryptography.fernet import Fernet
 
-from src.config.app_config import app_conf
+from src.config import app_conf
 
 cipher_suite = Fernet(key=app_conf.secret_key.get_secret_value().encode())
 

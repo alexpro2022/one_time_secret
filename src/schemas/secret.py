@@ -1,8 +1,8 @@
 from pydantic import BaseModel, Field, PositiveInt, model_validator
+from toolkit.types_app import NonEmptyStr
 
-from src import cipher
-from src.config.app_config import app_conf
-from src.types_app import NonEmptyStr
+from src.config import app_conf
+from src.services import cipher
 
 
 class SecretKey(BaseModel):

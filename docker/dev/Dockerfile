@@ -7,26 +7,21 @@ FROM python:${PYTHON_VERSION}-slim AS base
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 WORKDIR /app
-RUN --mount=type=bind,source=requirements,target=requirements \
-    python -m pip install --upgrade pip && \
-    pip install -r requirements/requirements.txt --no-cache-dir
 
 
 FROM base AS test
-RUN --mount=type=bind,source=requirements,target=requirements \
-    pip install -r requirements/test.requirements.txt --no-cache-dir
-COPY src src
-COPY setup.cfg .
+# Test =============
+COPY pyproject.toml .
+RUN python -m pip install --upgrade pip && pip install .[test]
 COPY tests tests
+# App ==============
+COPY src src
 
 
-FROM base AS migration
-RUN pip install alembic
-COPY alembic.ini .
-COPY alembic alembic
-
-
-FROM migration AS app
+FROM base AS app
+RUN --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
+    python -m pip install --upgrade pip && pip install .
+# User ========
 ARG UID=10001
 RUN adduser \
     --disabled-password \
@@ -37,4 +32,8 @@ RUN adduser \
     --uid "${UID}" \
     appuser
 USER appuser
+# Migration ========
+COPY alembic.ini .
+COPY alembic alembic
+# App ==============
 COPY src src

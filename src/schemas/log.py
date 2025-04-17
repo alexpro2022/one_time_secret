@@ -1,7 +1,8 @@
 from datetime import datetime
 
-from src.api.schemas.base import Base, TypePK
-from src.models.events import Event
+from toolkit.schemas.base import Base, TypePK
+
+from src.models.utils import Event
 
 
 class Log(Base):

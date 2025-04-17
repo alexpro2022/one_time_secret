@@ -1,13 +1,14 @@
-from fastapi import BackgroundTasks
+from toolkit.api.fastapi.dependencies import async_session, client_info, redis
+from toolkit.repo.cache import crud as cache_crud
+from toolkit.repo.db import crud as db_crud
+from toolkit.types_app import _AS, TypeModel
+from toolkit.utils.asyncio_utils import cancel_task, delay_task
+from toolkit.utils.utils import get_time_now
 
-from src.api.dependencies import async_session, client_info, redis
-from src.models.events import Event
-from src.models.secret import Secret
-from src.repo.cache import crud as cache_crud
-from src.repo.db import crud as db_crud
+from fastapi import BackgroundTasks
+from src.models import Secret
+from src.models.utils import Event
 from src.services.log import logger
-from src.types_app import _AS, TypeModel
-from src.utils import cancel_task, delay_task, get_time_now
 
 
 class SecretService:
@@ -34,7 +35,7 @@ class SecretService:
         async def tasks():
             secret_id = filter_data["id"]
             await cache_crud.delete(client=self.redis, name=str(secret_id))
-            await logger(self.client_info, secret_id, Event.deleted, get_time_now())
+            await logger(self.client_info, secret_id, Event.DELETED, get_time_now())
 
         async def _():
             if bg_tasks:
@@ -44,9 +45,9 @@ class SecretService:
             return await db_crud.delete(session, self.model, **filter_data)
 
         if session is None:
-            from src.config.repositories.db_config import async_session
+            from src.config import db_config as c
 
-            async with async_session.begin() as session:
+            async with c.async_session.begin() as session:
                 return await _()
         return await _()
 
@@ -60,10 +61,10 @@ class SecretService:
         assert self.session.in_transaction()
         secret_id = filter_data["id"]
         self.bg_tasks.add_task(
-            logger, self.client_info, secret_id, Event.read, get_time_now()
+            logger, self.client_info, secret_id, Event.READ, get_time_now()
         )
         data = await cache_crud.get(self.redis, str(filter_data["id"]))
-        cancel_task(secret_id)
+        cancel_task(task_name=secret_id)
         if data:
             self.bg_tasks.add_task(self._del, **filter_data)
             return self.model(**data)
@@ -82,7 +83,7 @@ class SecretService:
         scrt = await db_crud.get_one(self.session, self.model, **filter_data)
         if scrt.passphrase != passphrase:
             return None
-        cancel_task(scrt.id)
+        cancel_task(task_name=scrt.id)
         return await self._del(self.session, self.bg_tasks, **filter_data)
 
     async def create(self, **create_data) -> TypeModel:
@@ -94,7 +95,7 @@ class SecretService:
         assert self.session.in_transaction()
         scrt = await db_crud.create(self.session, self.model(**create_data))
         self.bg_tasks.add_task(
-            logger, self.client_info, scrt.id, Event.created, get_time_now()
+            logger, self.client_info, scrt.id, Event.CREATED, get_time_now()
         )
         self.bg_tasks.add_task(
             cache_crud.set,

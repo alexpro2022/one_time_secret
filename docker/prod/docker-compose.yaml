@@ -7,9 +7,6 @@ services:
       file: ../base/backend.yaml
       service: fastapi_prod
 
-  # paste swag service here
-
-# Below is common for DEV and PROD
   adminer:
     extends:
       file: ../base/db.yaml

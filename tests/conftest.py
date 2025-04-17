@@ -1,4 +1,4 @@
 pytest_plugins = [
-    "tests.fixtures.fixtures",
+    "toolkit.test_tools.fixtures",
     "tests.fastapi_tests.fixtures.fixtures",
 ]

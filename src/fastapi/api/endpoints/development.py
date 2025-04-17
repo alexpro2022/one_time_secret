@@ -1,12 +1,19 @@
+"""
+The endpoints are not a part of the project.
+They are just for convenient checking on development.
+"""
+
+from toolkit.api.fastapi.dependencies import async_session
+from toolkit.repo.db import crud
+
 from fastapi import APIRouter
+from src.config import app_config as c
+from src.models import Log, Secret
 
-from src.api.dependencies import async_session
-from src.config.app_config import app_conf
-from src.models.log import Log
-from src.models.secret import Secret
-from src.repo.db import crud
-
-router = APIRouter(prefix=f"{app_conf.url_prefix}/development", tags=["Development"])
+router = APIRouter(
+    prefix=f"{c.app_conf.url_prefix}/development",
+    tags=["Development"],
+)
 
 
 @router.get(

@@ -1,14 +1,15 @@
-from fastapi import APIRouter, HTTPException, Query, status
+from toolkit.api.fastapi.dependencies import set_headers
+from toolkit.api.fastapi.responses import response_400, response_404
+from toolkit.api.fastapi.utils import try_return
+from toolkit.types_app import TypePK
 
-from src.api.dependencies import secret_service, set_headers
-from src.api.responses import response_400, response_404
-from src.api.schemas import secret as schemas
-from src.api.utils import try_return
-from src.config.app_config import app_conf
-from src.types_app import TypePK
+from fastapi import APIRouter, HTTPException, Query, status
+from src.config import app_config as c
+from src.fastapi.api.dependencies import secret_service
+from src.schemas import secret as schemas
 
 router = APIRouter(
-    prefix=f"{app_conf.url_prefix}/secret",
+    prefix=f"{c.app_conf.url_prefix}/secret",
     tags=["Secrets"],
     dependencies=[set_headers],
 )
