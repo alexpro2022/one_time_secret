@@ -32,6 +32,7 @@
 [![Python](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12%20%7C%203.13-blue?logo=python)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/-FastAPI-464646?logo=fastapi)](https://fastapi.tiangolo.com/)
 [![Pydantic](https://img.shields.io/badge/pydantic-2-blue?logo=Pydantic)](https://docs.pydantic.dev/)
+[![redis](https://img.shields.io/badge/-Redis-464646?logo=redis)](https://redis.io/)
 [![PostgreSQL](https://img.shields.io/badge/-PostgreSQL-464646?logo=PostgreSQL)](https://www.postgresql.org/)
 [![asyncpg](https://img.shields.io/badge/-asyncpg-464646?logo=PostgreSQL)](https://pypi.org/project/asyncpg/)
 [![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-2-blue?logo=sqlalchemy)](https://www.sqlalchemy.org/)
